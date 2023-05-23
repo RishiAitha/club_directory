@@ -1,1 +1,1 @@
-"# club_directory" 
+# club_directory
