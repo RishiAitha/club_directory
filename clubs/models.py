@@ -26,6 +26,7 @@ class Club(models.Model):
     editors = models.ManyToManyField("User", related_name="clubsEditing")
     creator = models.ForeignKey("User", on_delete=models.PROTECT, related_name="clubsCreated")
     messages = models.ManyToManyField("Message", related_name="clubs")
+    isApproved = models.BooleanField(default=False)
 
     def __str__(self):
         return f"CLUB{self.id} - {self.title}"
