@@ -25,8 +25,9 @@ class Club(models.Model):
     interestCount = models.IntegerField(default=0)
     editors = models.ManyToManyField("User", related_name="clubsEditing")
     creator = models.ForeignKey("User", on_delete=models.PROTECT, related_name="clubsCreated")
-    messages = models.ManyToManyField("Message", related_name="clubs")
+    messages = models.ManyToManyField("Message", related_name="clubs", blank=True)
     isApproved = models.BooleanField(default=False)
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"CLUB{self.id} - {self.title}"
@@ -42,6 +43,7 @@ class Club(models.Model):
             "editors": [user.email for user in self.editors.all()],
             "creator": self.creator.email,
             "messages": [message.id for message in self.messages.all()],
+            "timestamp": self.timestamp.strftime("%b %d %Y, %I: %M %p"),
         }
 
 class Message(models.Model):

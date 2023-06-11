@@ -8,4 +8,6 @@ urlpatterns = [
     path("register", views.register, name="register"),
 
     # API Routes
+    path("approved", views.approved_clubs, name="approved"),
+    path("pending", views.pending_clubs, name="pending")
 ]

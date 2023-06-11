@@ -60,3 +60,17 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "clubs/register.html")
+    
+def approved_clubs(request):
+    if request.method == "GET":
+        clubs = Club.objects.filter(isApproved=True).order_by("title").all()
+        return JsonResponse([club.serialize() for club in clubs], safe=False)
+    else:
+        return JsonResponse({"error": "GET request required for approved url"})
+
+def pending_clubs(request):
+    if request.method == "GET":
+        clubs = Club.objects.filter(isApproved=False).order_by("-timestamp").all()
+        return JsonResponse([club.serialize() for club in clubs], safe=False)
+    else:
+        return JsonResponse({"error": "GET request required for pending url"})
