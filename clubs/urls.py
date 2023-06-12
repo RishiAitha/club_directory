@@ -9,5 +9,8 @@ urlpatterns = [
 
     # API Routes
     path("approved", views.approved_clubs, name="approved"),
-    path("pending", views.pending_clubs, name="pending")
+    path("pending", views.pending_clubs, name="pending"),
+    path("messages/<int:clubID>", views.messages, name="messages"),
+    #path("create", views.create_club, name="create"),
+    path("edit", views.edit_club, name="edit"),
 ]

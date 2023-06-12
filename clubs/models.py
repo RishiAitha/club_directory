@@ -44,6 +44,7 @@ class Club(models.Model):
             "creator": self.creator.email,
             "messages": [message.id for message in self.messages.all()],
             "timestamp": self.timestamp.strftime("%b %d %Y, %I: %M %p"),
+            "isApproved": self.isApproved,
         }
 
 class Message(models.Model):
