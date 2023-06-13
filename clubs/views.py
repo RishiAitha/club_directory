@@ -60,7 +60,10 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "clubs/register.html")
-    
+
+def terms(request):
+    return render(request, "clubs/terms.html")
+
 def approved_clubs(request):
     if request.method == "GET":
         clubs = Club.objects.filter(isApproved=True).order_by("title").all()
@@ -75,29 +78,62 @@ def pending_clubs(request):
     else:
         return JsonResponse({"error": "GET request required for pending url"}, status=400)
 
-def messages(request, clubID):
+def get_club(request, clubID):
+    if request.method == "GET":
+        club = None
+        if Club.objects.filter(pk=clubID).exists():
+            club = Club.objects.get(pk=clubID)
+            return JsonResponse(club.serialize(), safe=False)
+        else:
+            return JsonResponse({"error": "Club does not exist"}, status=400)
+
+def messages(request, clubID, page):
     if request.method == "GET":
         club = None
         if Club.objects.filter(pk=clubID).exists():
             club = Club.objects.get(pk=clubID)
         else:
             return JsonResponse({"error": "Club does not exist"}, status=400)
-        messages = Message.objects.filter(clubs=club)
-        return JsonResponse([message.serialize() for message in messages], safe=False)
+        
+        messages = Message.objects.filter(clubs=club).order_by("-timestamp").all()
+        paginator = Paginator(messages, 10)
+
+        if (page < 1):
+            return JsonResponse({"pageCount": paginator.num_pages}, status=200)
+        
+        pageObj = paginator.get_page(page)
+
+        return JsonResponse([message.serialize() for message in pageObj], safe=False)
     else:
         return JsonResponse({"error": "GET request required for messages url"}, status=400)
 
 @csrf_exempt
 @login_required
-def edit_club(request): # universal edit view
+def create_club(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        title = data.get("title", "")
+        description = data.get("description", "")
+        announcement = data.get("announcement", "")
+        creator = request.user
+        
+        club = Club(title=title, description=description, announcement=announcement, creator=creator)
+        club.editors.add(creator)
+        club.save()
+
+        return JsonResponse(club.serialize(), safe=False)
+    else:
+        return JsonResponse({"error": "POST request required for create url"}, status=400)
+
+@csrf_exempt
+@login_required
+def edit_content(request): # edit description, announcement, and image
     if request.method == "PUT":
         data = json.loads(request.body)
         clubID = data.get("clubID", "")
         description = data.get("description", "")
         announcement = data.get("announcement", "")
-        interestChange = data.get("interestChange", "")
-        editorEmails = [email.strip() for email in data.get("editors").split(",")] # format in javascript
-        isApproved = data.get("isApproved", "")
+        # GET IMAGE HERE
 
         club = None
         if Club.objects.filter(pk=clubID).exists():
@@ -105,11 +141,53 @@ def edit_club(request): # universal edit view
         else:
             return JsonResponse({"error": "Club does not exist"}, status=400)
 
-        club.interestCount += interestChange
-        club.save()
         if club.editors.contains(request.user) or request.user.isAdmin:
             club.description = description
             club.announcement = announcement
+            club.save()
+
+            return JsonResponse(club.serialize(), safe=False)
+        else:
+            return JsonResponse({"error": "Current user is not authorized to change club content"})
+    else:
+        return JsonResponse({"error": "PUT request required for edit/content  url"}, status=400)
+
+@csrf_exempt
+@login_required
+def edit_interest(request):
+    if request.method == "PUT":
+        data = json.loads(request.body)
+        clubID = data.get("clubID", "")
+        interestChange = data.get("interestChange", "")
+
+        club = None
+        if Club.objects.filter(pk=clubID).exists():
+            club = Club.objects.get(pk=clubID)
+        else:
+            return JsonResponse({"error": "Club does not exist"}, status=400)
+        
+        club.interestCount += interestChange
+        club.save()
+        
+        return JsonResponse(club.serialize(), safe=False)
+    else:
+        return JsonResponse({"error": "PUT request required for edit/interest url"}, status=400)
+
+@csrf_exempt
+@login_required
+def edit_editors(request):
+    if request.method == "PUT":
+        data = json.loads(request.body)
+        clubID = data.get("clubID", "")
+        editorEmails = [email.strip() for email in data.get("editors").split(",")] # format in javascript
+
+        club = None
+        if Club.objects.filter(pk=clubID).exists():
+            club = Club.objects.get(pk=clubID)
+        else:
+            return JsonResponse({"error": "Club does not exist"}, status=400)
+        
+        if club.editors.contains(request.user) or request.user.isAdmin:
             newEditors = []
             for editorEmail in editorEmails:
                 try:
@@ -117,17 +195,62 @@ def edit_club(request): # universal edit view
                     newEditors.append(user)
                 except User.DoesNotExist:
                     return JsonResponse({"error": f"User with email {editorEmail} does not exist"}, status=400)
-            club.editors.clear()
-            for editor in newEditors:
-                club.editors.add(editor)
-            club.save()
-            
+            if newEditors:
+                club.editors.clear()
+                for editor in newEditors:
+                    club.editors.add(editor)
+                club.save()
+
+                return JsonResponse(club.serialize(), safe=False)
+            else:
+                return JsonResponse({"error": "No editors specified"}, status=400)
+        else:
+            return JsonResponse({"error": "Current user is not authorized to change editors"}, status=400)
+    else:
+        return JsonResponse({"error": "PUT request required for edit/editors url"}, status=400)
+
+@csrf_exempt
+@login_required
+def edit_approval(request):
+    if request.method == "PUT":
+        data = json.loads(request.body)
+        clubID = data.get("clubID", "")
+        approval = data.get("approval", "")
+
+        club = None
+        if Club.objects.filter(pk=clubID).exists():
+            club = Club.objects.get(pk=clubID)
+        else:
+            return JsonResponse({"error": "Club does not exist"}, status=400)
         
         if request.user.isAdmin:
-            club.isApproved = isApproved
+            club.isApproved = approval
             club.save()
-        
-        club.save()
-        return JsonResponse(club.serialize(), safe=False)
+
+            return JsonResponse(club.serialize(), safe=False)
+        else:
+            return JsonResponse({"error": "Current user is not authorized to approve club"}, status=400)
     else:
-        return JsonResponse({"error": "PUT request required for edit url"}, status=400)
+        return JsonResponse({"error": "PUT request required for edit/approval url"}, status=400)
+
+@csrf_exempt
+@login_required
+def post_message(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        clubID = data.get("clubID", "")
+        content = data.get("content", "")
+
+        club = None
+        if Club.objects.filter(pk=clubID).exists():
+            club = Club.objects.get(pk=clubID)
+        else:
+            return JsonResponse({"error": "Club does not exist"}, status=400)
+
+        message = Message(content=content, poster=request.user)
+        message.save()
+        club.messages.add(message)
+        club.save()
+        return JsonResponse(message.serialize(), safe=False)
+    else:
+        return JsonResponse({"error": "POST request required for post url"}, status=400)
