@@ -1,0 +1,11 @@
+.preview-container {
+    border-style: solid;
+    border-color: black;
+    border-width: 3px;
+    margin: 5px;
+    padding: 3px;
+}
+
+.preview-title {
+    cursor: pointer;
+}

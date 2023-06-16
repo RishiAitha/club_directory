@@ -118,6 +118,7 @@ def create_club(request):
         creator = request.user
         
         club = Club(title=title, description=description, announcement=announcement, creator=creator)
+        club.save()
         club.editors.add(creator)
         club.save()
 

@@ -2,23 +2,34 @@
 {% load static %}
 
 {% block body %}
-    <div id="clubs-div">
-        <div id="create-div">
-            <h3>Add New Club</h3>
-            <div id="create-message"></div>
-            <form onsubmit="submit_club();return false" id="create-form">
-                <div class="form-group">
-                    <input id="create-title" class="form-control" placeholder="Club Title">
-                </div>
-                <div class="form-group">
-                    <textarea id="create-description" class="form-control" placeholder="Club Description"></textarea>
-                </div>
-                <div class="form-group">
-                    <textarea id="create-announcement" class="form-control" placeholder="Club Announcement"></textarea>
-                </div>
-                <input type="submit" class="btn btn-primary" value="Submit Club Request">
+    <div id="clubs-container"></div>
+
+    <div id="single-container">
+        <div id="post-container" style="display: none;">
+            <h3>New Message</h3>
+            <div id="post-errorMessage"></div>
+            <form id="post-form">
+                <textarea class="form-control" id="post-content" placeholder="Message Content"></textarea>
+                <input type="submit" class="btn btn-primary" id="message-submit" value="Post Message"/>
             </form>
         </div>
+    </div>
+
+    <div id="create-container">
+        <h3>Add New Club</h3>
+        <div id="create-errorMessage"></div>
+        <form onsubmit="submit_club();return false" id="create-form">
+            <div class="form-group">
+                <input id="create-title" class="form-control" placeholder="Club Title">
+            </div>
+            <div class="form-group">
+                <textarea id="create-description" class="form-control" placeholder="Club Description"></textarea>
+            </div>
+            <div class="form-group">
+                <textarea id="create-announcement" class="form-control" placeholder="Club Announcement"></textarea>
+            </div>
+            <input type="submit" class="btn btn-primary" value="Submit Club Request">
+        </form>
     </div>
 {% endblock %}
 

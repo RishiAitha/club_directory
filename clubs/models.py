@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 
-class User(AbstractUser): # Username is used for login and message board, email is used for managing club editing
+class User(AbstractUser):
     isAdmin = models.BooleanField(default=False)
     
     def __str__(self):
@@ -14,14 +14,14 @@ class User(AbstractUser): # Username is used for login and message board, email 
             "id": self.id,
             "email": self.email,
             "username": self.username,
-            "isAdmin": self.isAdmin,
+            "isAdmin": self.isAdmin
         }
 
 class Club(models.Model):
     title = models.CharField(max_length=64)
     description = models.TextField(blank=True)
-    # Image Field
     announcement = models.TextField(blank=True)
+    # Image Field
     interestCount = models.IntegerField(default=0)
     editors = models.ManyToManyField("User", related_name="clubsEditing")
     creator = models.ForeignKey("User", on_delete=models.PROTECT, related_name="clubsCreated")
@@ -37,14 +37,14 @@ class Club(models.Model):
             "id": self.id,
             "title": self.title,
             "description": self.description,
-            # Image Field
             "announcement": self.announcement,
+            # Image Field
             "interestCount": self.interestCount,
-            "editors": [user.email for user in self.editors.all()],
-            "creator": self.creator.email,
-            "messages": [message.id for message in self.messages.all()],
+            "editors": [user.serialize() for user in self.editors.all()],
+            "creator": self.creator.serialize(),
+            "messages": [message.serialize() for message in self.messages.all()],
             "timestamp": self.timestamp.strftime("%b %d %Y, %I: %M %p"),
-            "isApproved": self.isApproved,
+            "isApproved": self.isApproved
         }
 
 class Message(models.Model):
@@ -60,5 +60,5 @@ class Message(models.Model):
             "id": self.id,
             "content": self.content,
             "timestamp": self.timestamp.strftime("%b %d %Y, %I: %M %p"),
-            "poster": self.poster.username,
+            "poster": self.poster.serialize()
         }
