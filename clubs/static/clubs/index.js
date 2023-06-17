@@ -3,6 +3,9 @@ document.addEventListener('DOMContentLoaded', function() { // on start
     document.querySelector('#clubs-container').style.display = 'block';
     document.querySelector('#single-container').style.display = 'none';
     document.querySelector('#create-container').style.display = 'none';
+    
+    sessionStorage.setItem('messagePage', 1);
+
     const createNav = document.querySelector('#create-nav');
     createNav.addEventListener('click', () => {
         // display creation page if nav link is clicked
@@ -129,11 +132,18 @@ function show_club(id) {
         }
 
         document.querySelector('#single-container').append(document.createElement('hr'));
+        
+        show_messages(club.id);
+    });
+}
 
-        club.messages.forEach(message => {
-            const messageContainer = document.createElement('div');
-            messageContainer.classList.add('message-container');
-            
+function show_messages(clubID) {
+    fetch(`/messages/${clubID}/${sessionStorage.getItem('messagePage')}`)
+    .then(response => response.json())
+    .then(messages => {
+        const messageContainer = document.createElement('div');
+        messageContainer.classList.add('message-container');
+        messages.forEach(message => {
             const poster = document.createElement('div');
             poster.classList.add('message-poster');
             poster.innerHTML = message.poster.username;
@@ -149,8 +159,93 @@ function show_club(id) {
             content.innerHTML = message.content;
             messageContainer.append(content);
 
+            const replyButton = document.createElement('button');
+            replyButton.classList.add('btn', 'btn-primary', 'reply-button');
+            replyButton.innerHTML = 'Reply (does not work)';
+            messageContainer.append(replyButton);
+
             document.querySelector('#single-container').append(messageContainer);
-        })
+        });
+        show_pagenav(clubID);
+    });
+}
+
+function show_pagenav(clubID) {
+    fetch(`/messages/${clubID}/${0}`)
+    .then(response => response.json())
+    .then(info => {
+        const count = info.pageCount;
+        
+        const pageNav = document.createElement('nav');
+        pageNav.setAttribute('id', 'page-nav');
+        pageNav.setAttribute('aria-label', 'Message Page Navigation');
+
+        const pageUL = document.createElement('ul');
+        pageUL.classList.add('pagination');
+        pageNav.append(pageUL);
+
+        const prev = document.createElement('li');
+        prev.classList.add('page-prev');
+        pageUL.append(prev);
+
+        const prevA = document.createElement('a');
+        prevA.classList.add('page-link');
+        prevA.href = '#';
+        prevA.setAttribute('aria-label', 'Previous');
+        prevA.onclick = () => {
+            if (parseInt(sessionStorage.getItem('messagePage')) - 1 > 0) {
+                sessionStorage.setItem('messagePage', parseInt(sessionStorage.getItem('messagePage')) - 1);
+                show_club(clubID);
+            }
+        };
+        prev.append(prevA);
+
+        const prevSpan = document.createElement('span');
+        prevSpan.classList.add('pagination-icon');
+        prevSpan.setAttribute('aria-hidden', 'true');
+        prevSpan.innerHTML = '&laquo;';
+        prevA.append(prevSpan);
+
+        for (let i = 1; i <= count; i++) {
+            const single = document.createElement('li');
+            single.classList.add('page-item');
+            single.setAttribute('id', `page-${i}`);
+            pageUL.append(single);
+
+            const singleA = document.createElement('a');
+            singleA.classList.add('page-link');
+            singleA.href = '#';
+            singleA.innerHTML = `${i}`;
+            singleA.onclick = () => {
+                sessionStorage.setItem('messagePage', i);
+                show_club(clubID);
+            };
+            single.append(singleA);
+        }
+
+        const next = document.createElement('li');
+        next.classList.add('page-next');
+        pageUL.append(next);
+
+        const nextA = document.createElement('a');
+        nextA.classList.add('page-link');
+        nextA.href = '#';
+        nextA.setAttribute('aria-label', 'Next');
+        nextA.onclick = () => {
+            if (parseInt(sessionStorage.getItem('messagePage')) + 1 <= count) {
+                sessionStorage.setItem('messagePage', parseInt(sessionStorage.getItem('messagePage')) + 1);
+                show_club(clubID);
+            }
+        };
+        next.append(nextA);
+
+        const nextSpan = document.createElement('span');
+        nextSpan.classList.add('pagination-icon');
+        nextSpan.setAttribute('aria-hidden', 'true');
+        nextSpan.innerHTML = '&raquo;';
+        nextA.append(nextSpan);
+
+        document.querySelector('#single-container').append(pageNav);
     });
 }
 
