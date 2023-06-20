@@ -146,7 +146,7 @@ function show_messages(clubID) {
         messages.forEach(message => {
             const poster = document.createElement('div');
             poster.classList.add('message-poster');
-            poster.innerHTML = message.poster.username;
+            poster.innerHTML = message.poster.username + " - " + message.poster.email;
             messageContainer.append(poster);
 
             const timestamp = document.createElement('div');
