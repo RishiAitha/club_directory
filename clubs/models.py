@@ -42,7 +42,7 @@ class Club(models.Model):
             "interestCount": self.interestCount,
             "editors": [user.serialize() for user in self.editors.all()],
             "creator": self.creator.serialize(),
-            "messages": [message.serialize() for message in self.messages.all()],
+            "messages": [message.serialize() for message in self.messages.all()], # order by is not needed because of pagination API route
             "timestamp": self.timestamp.strftime("%b %d %Y, %I: %M %p"),
             "isApproved": self.isApproved
         }
@@ -51,9 +51,27 @@ class Message(models.Model):
     content = models.TextField(blank=True)
     timestamp = models.DateTimeField(auto_now_add=True)
     poster = models.ForeignKey("User", on_delete=models.CASCADE, related_name="messagesPosted")
+    replies = models.ManyToManyField("Reply", related_name="messages", blank=True)
 
     def __str__(self):
         return f"MESSAGE{self.id} - By: {self.poster}"
+    
+    def serialize(self):
+        return {
+            "id": self.id,
+            "content": self.content,
+            "timestamp": self.timestamp.strftime("%b %d %Y, %I: %M %p"),
+            "poster": self.poster.serialize(),
+            "replies": [reply.serialize() for reply in self.replies.order_by("-timestamp").all()] # order by is needed to avoid extra API route
+        }
+    
+class Reply(models.Model):
+    content = models.TextField(blank=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    poster = models.ForeignKey("User", on_delete=models.CASCADE, related_name="repliesPosted")
+
+    def __str__(self):
+        return f"REPLY{self.id} - By: {self.poster}"
     
     def serialize(self):
         return {

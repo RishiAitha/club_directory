@@ -9,3 +9,7 @@
 .preview-title {
     cursor: pointer;
 }
+
+.reply-container {
+    margin-left: 20px;
+}

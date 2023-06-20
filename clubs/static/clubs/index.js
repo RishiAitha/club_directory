@@ -164,10 +164,43 @@ function show_messages(clubID) {
             replyButton.innerHTML = 'Reply (does not work)';
             messageContainer.append(replyButton);
 
+            show_replies(message, messageContainer);
+
             document.querySelector('#single-container').append(messageContainer);
         });
         show_pagenav(clubID);
     });
+}
+
+function show_replies(message, messageContainer) {
+    const replyContainer = document.createElement('div');
+    replyContainer.classList.add('reply-container');
+
+    if (message.replies.length > 0) {
+        const replyLabel = document.createElement('h5');
+        replyLabel.classList.add('reply-label');
+        replyLabel.innerHTML = 'Replies:';
+        replyContainer.append(replyLabel);
+    }
+
+    message.replies.forEach(reply => {
+        const poster = document.createElement('div');
+        poster.classList.add('reply-poster');
+        poster.innerHTML = reply.poster.username + " - " + reply.poster.email;
+        replyContainer.append(poster);
+
+        const timestamp = document.createElement('div');
+        timestamp.classList.add('reply-timestamp');
+        timestamp.innerHTML = reply.timestamp;
+        replyContainer.append(timestamp);
+
+        const content = document.createElement('div');
+        content.classList.add('reply-content');
+        content.innerHTML = reply.content;
+        replyContainer.append(content);
+    });
+
+    messageContainer.append(replyContainer);
 }
 
 function show_pagenav(clubID) {
