@@ -9,7 +9,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 
-from .models import User, Club, Message
+from .models import User, Club, Message, Reply
 
 # Create your views here.
 
@@ -255,3 +255,25 @@ def post_message(request):
         return JsonResponse(message.serialize(), safe=False)
     else:
         return JsonResponse({"error": "POST request required for post url"}, status=400)
+
+@csrf_exempt
+@login_required
+def post_reply(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        messageID = data.get("messageID", "")
+        content = data.get("content", "")
+
+        message = None
+        if Message.objects.filter(pk=messageID).exists():
+            message = Message.objects.get(pk=messageID)
+        else:
+            return JsonResponse({"error": "Message does not exist"}, status=400)
+        
+        reply = Reply(content=content, poster=request.user)
+        reply.save()
+        message.replies.add(reply)
+        message.save()
+        return JsonResponse(reply.serialize(), safe=False)
+    else:
+        return JsonResponse({"error": "POST request required for reply url"}, status=400)

@@ -5,20 +5,24 @@ document.addEventListener('DOMContentLoaded', function() { // on start
     document.querySelector('#create-container').style.display = 'none';
     
     sessionStorage.setItem('messagePage', 1);
+    sessionStorage.setItem('loggedIn', document.querySelector('#nav-username') !== null);
+    sessionStorage.setItem('replying', -1);
 
-    const createNav = document.querySelector('#create-nav');
-    createNav.addEventListener('click', () => {
-        // display creation page if nav link is clicked
-        document.querySelector('#clubs-container').style.display = 'none';
-        document.querySelector('#single-container').style.display = 'none';
-        document.querySelector('#create-container').style.display = 'block';
+    if (sessionStorage.getItem('loggedIn') == 'true') {
+        const createNav = document.querySelector('#create-nav');
+        createNav.addEventListener('click', () => {
+            // display creation page if nav link is clicked
+            document.querySelector('#clubs-container').style.display = 'none';
+            document.querySelector('#single-container').style.display = 'none';
+            document.querySelector('#create-container').style.display = 'block';
 
-        // clear creation fields
-        document.querySelector('#create-title').value = '';
-        document.querySelector('#create-description').value = '';
-        document.querySelector('#create-announcement').value = '';
-        document.querySelector('#create-errorMessage').innerHTML = '';
-    });
+            // clear creation fields
+            document.querySelector('#create-title').value = '';
+            document.querySelector('#create-description').value = '';
+            document.querySelector('#create-announcement').value = '';
+            document.querySelector('#create-errorMessage').innerHTML = '';
+        });
+    }
     show_approved(); // start by showing approved clubs
 });
 
@@ -63,9 +67,13 @@ function preview_setup(club) {
 }
 
 function show_club(id) {
-    const postContainer = document.querySelector('#post-container');
-    postContainer.parentNode.innerHTML = '';
-
+    let postContainer;
+    let postReplyContainer;
+    if (sessionStorage.getItem('loggedIn') === 'true') {
+        postContainer = document.querySelector('#post-container');
+        postReplyContainer = document.querySelector('#postReply-container');
+    }
+    document.querySelector('#single-container').innerHTML = '';
     document.querySelector('#clubs-container').style.display = 'none';
     document.querySelector('#single-container').style.display = 'block';
     document.querySelector('#create-container').style.display = 'none';
@@ -109,12 +117,14 @@ function show_club(id) {
         interestDisplay.id = 'single-interestDisplay';
         interestDisplay.innerHTML = 'Interested Users Count: ' + club.interestCount;
         document.querySelector('#single-container').append(interestDisplay);
-
-        const interestButton = document.createElement('button');
-        interestButton.id = 'single-interestButton';
-        interestButton.classList.add('btn', 'btn-primary');
-        interestButton.innerHTML = 'Mark as Interesting (not working yet)';
-        document.querySelector('#single-container').append(interestButton);
+        
+        if (sessionStorage.getItem('loggedIn') === 'true') {
+            const interestButton = document.createElement('button');
+            interestButton.id = 'single-interestButton';
+            interestButton.classList.add('btn', 'btn-primary');
+            interestButton.innerHTML = 'Mark as Interesting (not working yet)';
+            document.querySelector('#single-container').append(interestButton);
+        }
 
         document.querySelector('#single-container').append(document.createElement('hr'));
         
@@ -123,48 +133,48 @@ function show_club(id) {
         messageLabel.innerHTML = 'Message Board:';
         document.querySelector('#single-container').append(messageLabel);
 
-        //const postContainer = document.querySelector('#post-container');
-        postContainer.style.display = 'block';
-        document.querySelector('#single-container').appendChild(postContainer);
-        document.querySelector('#post-form').onsubmit = () => {
-            post_message(club.id);
-            return false;
+        if (sessionStorage.getItem('loggedIn') == 'true') {
+            postContainer.style.display = 'block'; // variable assigned above
+            document.querySelector('#single-container').appendChild(postContainer);
+            document.querySelector('#post-form').onsubmit = () => {
+                post_message(club.id);
+                return false;
+            }
+            
+            document.querySelector('#single-container').append(document.createElement('hr'));
         }
-
-        document.querySelector('#single-container').append(document.createElement('hr'));
         
-        show_messages(club.id);
+        show_messages(club.id, postReplyContainer);
     });
 }
 
-function show_messages(clubID) {
+function show_messages(clubID, postReplyContainer) {
     fetch(`/messages/${clubID}/${sessionStorage.getItem('messagePage')}`)
     .then(response => response.json())
     .then(messages => {
         const messageContainer = document.createElement('div');
-        messageContainer.classList.add('message-container');
+        messageContainer.id = 'message-container';
         messages.forEach(message => {
+            const singleMessage = document.createElement('div');
+            singleMessage.classList.add('message-single');
+            messageContainer.append(singleMessage);
+
             const poster = document.createElement('div');
             poster.classList.add('message-poster');
             poster.innerHTML = message.poster.username + " - " + message.poster.email;
-            messageContainer.append(poster);
+            singleMessage.append(poster);
 
             const timestamp = document.createElement('div');
             timestamp.classList.add('message-timestamp');
             timestamp.innerHTML = message.timestamp;
-            messageContainer.append(timestamp);
+            singleMessage.append(timestamp);
 
             const content = document.createElement('div');
             content.classList.add('message-content');
             content.innerHTML = message.content;
-            messageContainer.append(content);
+            singleMessage.append(content);
 
-            const replyButton = document.createElement('button');
-            replyButton.classList.add('btn', 'btn-primary', 'reply-button');
-            replyButton.innerHTML = 'Reply (does not work)';
-            messageContainer.append(replyButton);
-
-            show_replies(message, messageContainer);
+            show_replies(clubID, message, singleMessage, postReplyContainer);
 
             document.querySelector('#single-container').append(messageContainer);
         });
@@ -172,9 +182,37 @@ function show_messages(clubID) {
     });
 }
 
-function show_replies(message, messageContainer) {
+function show_replies(clubID, message, singleMessage, postReplyContainer) {
     const replyContainer = document.createElement('div');
     replyContainer.classList.add('reply-container');
+
+    if (sessionStorage.getItem('loggedIn') == 'true') {
+        const replyButton = document.createElement('button');
+        replyButton.classList.add('btn', 'btn-primary', 'reply-button');
+        replyButton.id = `reply-button-${message.id}`;
+        replyButton.innerHTML = 'Reply';
+        replyButton.onclick = () => {
+            if (sessionStorage.getItem('replying') === `${message.id}`) {
+                document.querySelector(`#reply-button-${message.id}`).innerHTML = 'Reply';
+                sessionStorage.setItem('replying', -1);
+                postReplyContainer.style.display = 'none';
+            } else {
+                if (sessionStorage.getItem('replying') !== '-1') {
+                    // replying somewhere, not here
+                    document.querySelector(`#reply-button-${sessionStorage.getItem('replying')}`).innerHTML = 'Reply';
+                }
+                document.querySelector(`#reply-button-${message.id}`).innerHTML = 'Cancel Reply';
+                sessionStorage.setItem('replying', message.id);
+                replyContainer.prepend(postReplyContainer);
+                postReplyContainer.style.display = 'block';
+                document.querySelector('#postReply-form').onsubmit = () => {
+                    post_reply(clubID, message.id);
+                    return false;
+                };
+            }
+        };
+        singleMessage.append(replyButton);
+    }
 
     if (message.replies.length > 0) {
         const replyLabel = document.createElement('h5');
@@ -184,23 +222,27 @@ function show_replies(message, messageContainer) {
     }
 
     message.replies.forEach(reply => {
+        const singleReply = document.createElement('div');
+        singleReply.classList.add('reply-single');
+        replyContainer.append(singleReply);
+
         const poster = document.createElement('div');
         poster.classList.add('reply-poster');
         poster.innerHTML = reply.poster.username + " - " + reply.poster.email;
-        replyContainer.append(poster);
+        singleReply.append(poster);
 
         const timestamp = document.createElement('div');
         timestamp.classList.add('reply-timestamp');
         timestamp.innerHTML = reply.timestamp;
-        replyContainer.append(timestamp);
+        singleReply.append(timestamp);
 
         const content = document.createElement('div');
         content.classList.add('reply-content');
         content.innerHTML = reply.content;
-        replyContainer.append(content);
+        singleReply.append(content);
     });
 
-    messageContainer.append(replyContainer);
+    singleMessage.append(replyContainer);
 }
 
 function show_pagenav(clubID) {
@@ -330,6 +372,28 @@ function post_message(clubID) {
     }
 
     return false;
+}
+
+function post_reply(clubID, messageID) {
+    if (document.querySelector('#postReply-content').value == '') {
+        document.querySelector('#postReply-errorMessage').innerHTML = 'Reply must have content.';
+    } else {
+        fetch('/reply', {
+            method: 'POST',
+            body: JSON.stringify({
+                messageID: messageID,
+                content: document.querySelector('#postReply-content').value
+            })
+        })
+        .then(response => response.json())
+        .then(result => {
+            console.log(result);
+            document.querySelector('#postReply-errorMessage').innerHTML = '';
+            document.querySelector('#postReply-content').value = '';
+            document.querySelector('#postReply-container').style.display = 'none';
+            show_club(clubID);
+        })
+    }
 }
 
 

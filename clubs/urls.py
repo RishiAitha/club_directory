@@ -19,4 +19,5 @@ urlpatterns = [
     path("edit/editors", views.edit_editors, name="editeditors"),
     path("edit/approval", views.edit_approval, name="editapproval"),
     path("post", views.post_message, name="post"),
+    path("reply", views.post_reply, name="reply")
 ]

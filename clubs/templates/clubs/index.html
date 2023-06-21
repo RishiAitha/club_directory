@@ -6,11 +6,19 @@
 
     <div id="single-container">
         <div id="post-container" style="display: none;">
-            <h3>New Message</h3>
+            <h3 id="post-title">New Message</h3>
             <div id="post-errorMessage"></div>
             <form id="post-form">
                 <textarea class="form-control" id="post-content" placeholder="Message Content"></textarea>
-                <input type="submit" class="btn btn-primary" id="message-submit" value="Post Message"/>
+                <input type="submit" class="btn btn-primary" id="post-submit" value="Post Message"/>
+            </form>
+        </div>
+        <div id="postReply-container" style="display: none;">
+            <h3 id="postReply-title">New Reply</h3>
+            <div id="postReply-errorMessage"></div>
+            <form id="postReply-form">
+                <textarea class="form-control" id="postReply-content" placeholder="Reply Content"></textarea>
+                <input type="submit" class="btn btn-primary" id="postReply-submit" value="Post Reply"/>
             </form>
         </div>
     </div>
