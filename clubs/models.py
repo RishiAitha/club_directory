@@ -23,7 +23,8 @@ class Club(models.Model):
     announcement = models.TextField(blank=True)
     # Image Field
     interestCount = models.IntegerField(default=0)
-    editors = models.ManyToManyField("User", related_name="clubsEditing")
+    interestedUsers = models.ManyToManyField("User", related_name="interestingClubs")
+    editors = models.ManyToManyField("User", related_name="clubsEditing", blank=True)
     creator = models.ForeignKey("User", on_delete=models.PROTECT, related_name="clubsCreated")
     messages = models.ManyToManyField("Message", related_name="clubs", blank=True)
     isApproved = models.BooleanField(default=False)
@@ -40,6 +41,7 @@ class Club(models.Model):
             "announcement": self.announcement,
             # Image Field
             "interestCount": self.interestCount,
+            "interestedUsers": [user.serialize() for user in self.interestedUsers.all()],
             "editors": [user.serialize() for user in self.editors.all()],
             "creator": self.creator.serialize(),
             "messages": [message.serialize() for message in self.messages.all()], # order by is not needed because of pagination API route

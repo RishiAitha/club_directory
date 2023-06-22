@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', function() { // on start
     sessionStorage.setItem('replying', -1);
 
     if (sessionStorage.getItem('loggedIn') == 'true') {
+        sessionStorage.setItem('username', document.querySelector('#nav-username').firstChild.innerHTML);
         const createNav = document.querySelector('#create-nav');
         createNav.addEventListener('click', () => {
             // display creation page if nav link is clicked
@@ -122,7 +123,23 @@ function show_club(id) {
             const interestButton = document.createElement('button');
             interestButton.id = 'single-interestButton';
             interestButton.classList.add('btn', 'btn-primary');
-            interestButton.innerHTML = 'Mark as Interesting (not working yet)';
+            let interestedUsers = []
+            club.interestedUsers.forEach(user => {
+                interestedUsers.push(user.username);
+            })
+            if (!club.interestedUsers.some(user => user.username === sessionStorage.getItem('username'))) {
+                // not interested yet
+                interestButton.innerHTML = 'Mark as Interesting';
+                interestButton.onclick = () => {
+                    toggle_interest(true, club.id);
+                }
+            } else {
+                // already interested
+                interestButton.innerHTML = 'Remove Interest';
+                interestButton.onclick = () => {
+                    toggle_interest(false, club.id);
+                }
+            }
             document.querySelector('#single-container').append(interestButton);
         }
 
@@ -397,6 +414,31 @@ function post_reply(clubID, messageID) {
             show_club(clubID);
         })
     }
+}
+
+function toggle_interest(interested, clubID) {
+    fetch('/edit/interest', {
+        method: 'PUT',
+        body: JSON.stringify({
+            clubID: clubID
+        })
+    })
+    .then(response => response.json())
+    .then(result => {
+        console.log(result);
+        document.querySelector('#single-interestDisplay').innerHTML = 'Interested Users Count: ' + result.interestCount;
+        if (interested) {
+            document.querySelector('#single-interestButton').innerHTML = 'Remove Interest';
+            document.querySelector('#single-interestButton').onclick = () => {
+                toggle_interest(false, result.id);
+            }
+        } else {
+            document.querySelector('#single-interestButton').innerHTML = 'Mark as Interesting';
+            document.querySelector('#single-interestButton').onclick = () => {
+                toggle_interest(true, result.id);
+            }
+        }
+    })
 }
 
 

@@ -159,7 +159,7 @@ def edit_interest(request):
     if request.method == "PUT":
         data = json.loads(request.body)
         clubID = data.get("clubID", "")
-        interestChange = data.get("interestChange", "")
+        user = request.user
 
         club = None
         if Club.objects.filter(pk=clubID).exists():
@@ -167,8 +167,16 @@ def edit_interest(request):
         else:
             return JsonResponse({"error": "Club does not exist"}, status=400)
         
-        club.interestCount += interestChange
-        club.save()
+        if club.interestedUsers.contains(user):
+            # already interested
+            club.interestedUsers.remove(user)
+            club.interestCount = club.interestedUsers.all().count()
+            club.save()
+        else:
+            # not interested yet
+            club.interestedUsers.add(user)
+            club.interestCount = club.interestedUsers.all().count()
+            club.save()
         
         return JsonResponse(club.serialize(), safe=False)
     else:
