@@ -271,6 +271,7 @@ function show_pagenav(clubID) {
             prevA.onclick = () => {
                 if (parseInt(sessionStorage.getItem('messagePage')) - 1 > 0) {
                     sessionStorage.setItem('messagePage', parseInt(sessionStorage.getItem('messagePage')) - 1);
+                    sessionStorage.setItem('replying', -1);
                     show_club(clubID);
                 }
             };
@@ -294,6 +295,7 @@ function show_pagenav(clubID) {
                 singleA.innerHTML = `${i}`;
                 singleA.onclick = () => {
                     sessionStorage.setItem('messagePage', i);
+                    sessionStorage.setItem('replying', -1);
                     show_club(clubID);
                 };
                 single.append(singleA);
@@ -310,6 +312,7 @@ function show_pagenav(clubID) {
             nextA.onclick = () => {
                 if (parseInt(sessionStorage.getItem('messagePage')) + 1 <= count) {
                     sessionStorage.setItem('messagePage', parseInt(sessionStorage.getItem('messagePage')) + 1);
+                    sessionStorage.setItem('replying', -1);
                     show_club(clubID);
                 }
             };
