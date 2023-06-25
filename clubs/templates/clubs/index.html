@@ -4,6 +4,25 @@
 {% block body %}
     <div id="clubs-container"></div>
 
+    <div id="single-container"></div>
+
+    <div id="create-container">
+        <h3>Add New Club</h3>
+        <div id="create-errorMessage"></div>
+        <form onsubmit="submit_club();return false" id="create-form">
+            <div class="form-group">
+                <input id="create-title" class="form-control" placeholder="Club Title">
+            </div>
+            <div class="form-group">
+                <textarea id="create-description" class="form-control" placeholder="Club Description"></textarea>
+            </div>
+            <div class="form-group">
+                <textarea id="create-announcement" class="form-control" placeholder="Club Announcement"></textarea>
+            </div>
+            <input type="submit" class="btn btn-primary" value="Submit Club Request">
+        </form>
+    </div>
+
     <div id="form-container" style="display: none;">
         <div id="post-container" style="display: none;">
             <h3 id="post-title">New Message</h3>
@@ -21,26 +40,6 @@
                 <input type="submit" class="btn btn-primary" id="postReply-submit" value="Post Reply"/>
             </form>
         </div>
-    </div>
-
-    <div id="single-container">
-    </div>
-
-    <div id="create-container">
-        <h3>Add New Club</h3>
-        <div id="create-errorMessage"></div>
-        <form onsubmit="submit_club();return false" id="create-form">
-            <div class="form-group">
-                <input id="create-title" class="form-control" placeholder="Club Title">
-            </div>
-            <div class="form-group">
-                <textarea id="create-description" class="form-control" placeholder="Club Description"></textarea>
-            </div>
-            <div class="form-group">
-                <textarea id="create-announcement" class="form-control" placeholder="Club Announcement"></textarea>
-            </div>
-            <input type="submit" class="btn btn-primary" value="Submit Club Request">
-        </form>
     </div>
 {% endblock %}
 

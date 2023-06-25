@@ -68,12 +68,6 @@ function preview_setup(club) {
 }
 
 function show_club(id) {
-    let postContainer;
-    let postReplyContainer;
-    if (sessionStorage.getItem('loggedIn') === 'true') {
-        postContainer = document.querySelector('#post-container');
-        postReplyContainer = document.querySelector('#postReply-container');
-    }
     document.querySelector('#single-container').innerHTML = '';
     document.querySelector('#clubs-container').style.display = 'none';
     document.querySelector('#single-container').style.display = 'block';
@@ -151,6 +145,7 @@ function show_club(id) {
         document.querySelector('#single-container').append(messageLabel);
 
         if (sessionStorage.getItem('loggedIn') == 'true') {
+            const postContainer = document.querySelector('#post-container').cloneNode(true);
             postContainer.style.display = 'block'; // variable assigned above
             document.querySelector('#single-container').appendChild(postContainer);
             document.querySelector('#post-form').onsubmit = () => {
@@ -160,7 +155,7 @@ function show_club(id) {
             
             document.querySelector('#single-container').append(document.createElement('hr'));
         }
-        
+        const postReplyContainer = document.querySelector('#postReply-container').cloneNode(true);
         show_messages(club.id, postReplyContainer);
     });
 }
@@ -209,6 +204,7 @@ function show_replies(clubID, message, singleMessage, postReplyContainer) {
         replyButton.id = `reply-button-${message.id}`;
         replyButton.innerHTML = 'Reply';
         replyButton.onclick = () => {
+            document.querySelector('#postReply-errorMessage').innerHTML = '';
             if (sessionStorage.getItem('replying') === `${message.id}`) {
                 document.querySelector(`#reply-button-${message.id}`).innerHTML = 'Reply';
                 sessionStorage.setItem('replying', -1);
