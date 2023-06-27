@@ -5,11 +5,12 @@ document.addEventListener('DOMContentLoaded', function() { // on start
     document.querySelector('#create-container').style.display = 'none';
     
     sessionStorage.setItem('messagePage', 1);
-    sessionStorage.setItem('loggedIn', document.querySelector('#nav-username') !== null);
+    sessionStorage.setItem('loggedIn', document.querySelector('#userData-container') !== null);
     sessionStorage.setItem('replying', -1);
 
     if (sessionStorage.getItem('loggedIn') == 'true') {
-        sessionStorage.setItem('username', document.querySelector('#nav-username').firstChild.innerHTML);
+        sessionStorage.setItem('username', document.querySelector('#userData-username').innerHTML);
+        sessionStorage.setItem('isAdmin', document.querySelector('#userData-isAdmin').innerHTML === 'True')
         const createNav = document.querySelector('#create-nav');
         createNav.addEventListener('click', () => {
             // display creation page if nav link is clicked
@@ -23,6 +24,13 @@ document.addEventListener('DOMContentLoaded', function() { // on start
             document.querySelector('#create-announcement').value = '';
             document.querySelector('#create-errorMessage').innerHTML = '';
         });
+
+        if (sessionStorage.getItem('isAdmin') === 'true') {
+            const adminNav = document.querySelector('#admin-nav');
+            adminNav.addEventListener('click', () => {
+                show_pending();
+            })
+        }
     }
     show_approved(); // start by showing approved clubs
 });
@@ -32,39 +40,86 @@ function show_approved() { // show all approved clubs
     document.querySelector('#clubs-container').style.display = 'block';
     document.querySelector('#single-container').style.display = 'none';
     document.querySelector('#create-container').style.display = 'none';
+    document.querySelector('#clubs-container').innerHTML = '';
+    sessionStorage.setItem('clubType', 'approved');
 
     fetch('/approved')
     .then(response => response.json())
     .then(clubs => {
-        clubs.forEach(club => {
-            document.querySelector('#clubs-container').append(preview_setup(club));
-        })
+        show_previews(clubs);
     });
 }
 
-function preview_setup(club) {
-    const previewContainer = document.createElement('div');
-    previewContainer.classList.add('preview-container');
+function show_pending() {
+    // set correct divs to show
+    document.querySelector('#clubs-container').style.display = 'block';
+    document.querySelector('#single-container').style.display = 'none';
+    document.querySelector('#create-container').style.display = 'none';
+    document.querySelector('#clubs-container').innerHTML = '';
+    sessionStorage.setItem('clubType', 'pending');
 
-    const title = document.createElement('div');
-    title.innerHTML = club.title;
-    title.classList.add('preview-title');
-    title.addEventListener('click', function() {
-        show_club(club.id);
+    fetch('/pending')
+    .then(response => response.json())
+    .then(clubs => {
+        show_previews(clubs);
+    });
+}
+
+function show_previews(clubs) {
+    clubs.forEach(club => {
+        const previewContainer = document.createElement('div');
+        previewContainer.classList.add('preview-container');
+
+        const title = document.createElement('div');
+        title.innerHTML = club.title;
+        title.classList.add('preview-title');
+        title.addEventListener('click', function() {
+            show_club(club.id);
+        })
+        previewContainer.append(title);
+
+        const announcement = document.createElement('div');
+        announcement.innerHTML = 'Announcement: ' + club.announcement;
+        announcement.classList.add('preview-announcement');
+        previewContainer.append(announcement);
+
+        const image = document.createElement('div');
+        image.innerHTML = '--image here--'
+        image.classList.add('preview-image');
+        previewContainer.append(image);
+
+        if (sessionStorage.getItem('loggedIn') === 'true' && (club.editors.some(user => user.username === sessionStorage.getItem('username')) || sessionStorage.getItem('isAdmin') === 'true')) {
+            const editButton = document.createElement('button');
+            editButton.classList.add('preview-editButton', 'btn', 'btn-primary');
+            editButton.innerHTML = 'Edit Club';
+            editButton.onclick = () => {
+                console.log('edited club! (not yet)');
+            }
+            previewContainer.append(editButton);
+        }
+
+        if (sessionStorage.getItem('clubType') === 'pending') {
+            previewContainer.append(document.createElement('br'));
+            const approveButton = document.createElement('button');
+            approveButton.classList.add('preview-approveButton', 'btn', 'btn-primary');
+            approveButton.innerHTML = 'Approve Club';
+            approveButton.onclick = () => {
+                approve_club(club.id);
+            }
+            previewContainer.append(approveButton);
+        } else if (sessionStorage.getItem('loggedIn') === 'true' && sessionStorage.getItem('isAdmin') === 'true') {
+            previewContainer.append(document.createElement('br'));
+            const disapproveButton = document.createElement('button');
+            disapproveButton.classList.add('preview-disapproveButton', 'btn', 'btn-primary');
+            disapproveButton.innerHTML = 'Remove Club Approval';
+            disapproveButton.onclick = () => {
+                disapprove_club(club.id);
+            }
+            previewContainer.append(disapproveButton);
+        }
+
+        document.querySelector('#clubs-container').append(previewContainer);
     })
-    previewContainer.append(title);
-
-    const announcement = document.createElement('div');
-    announcement.innerHTML = 'Announcement: ' + club.announcement;
-    announcement.classList.add('preview-announcement');
-    previewContainer.append(announcement);
-
-    const image = document.createElement('div');
-    image.innerHTML = '--image here--'
-    image.classList.add('preview-image');
-    previewContainer.append(image);
-
-    return previewContainer;
 }
 
 function show_club(id) {
@@ -117,10 +172,6 @@ function show_club(id) {
             const interestButton = document.createElement('button');
             interestButton.id = 'single-interestButton';
             interestButton.classList.add('btn', 'btn-primary');
-            let interestedUsers = []
-            club.interestedUsers.forEach(user => {
-                interestedUsers.push(user.username);
-            })
             if (!club.interestedUsers.some(user => user.username === sessionStorage.getItem('username'))) {
                 // not interested yet
                 interestButton.innerHTML = 'Mark as Interesting';
@@ -434,6 +485,36 @@ function toggle_interest(interested, clubID) {
                 toggle_interest(true, result.id);
             }
         }
+    })
+}
+
+function approve_club(clubID) {
+    fetch('/edit/approval', {
+        method: 'PUT',
+        body: JSON.stringify({
+            clubID: clubID,
+            approval: true
+        })
+    })
+    .then(response => response.json())
+    .then(result => {
+        console.log(result);
+        show_approved();
+    })
+}
+
+function disapprove_club(clubID) {
+    fetch('/edit/approval', {
+        method: 'PUT',
+        body: JSON.stringify({
+            clubID: clubID,
+            approval: false
+        })
+    })
+    .then(response => response.json())
+    .then(result => {
+        console.log(result);
+        show_pending();
     })
 }
 
