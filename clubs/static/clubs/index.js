@@ -5,12 +5,15 @@ document.addEventListener('DOMContentLoaded', function() { // on start
     document.querySelector('#create-container').style.display = 'none';
     
     sessionStorage.setItem('messagePage', 1);
-    sessionStorage.setItem('loggedIn', document.querySelector('#userData-container') !== null);
+    sessionStorage.setItem('loggedIn', document.querySelector('#nav-username') !== null);
     sessionStorage.setItem('replying', -1);
+    sessionStorage.setItem('username', '');
+    sessionStorage.setItem('isAdmin', false);
 
-    if (sessionStorage.getItem('loggedIn') == 'true') {
-        sessionStorage.setItem('username', document.querySelector('#userData-username').innerHTML);
-        sessionStorage.setItem('isAdmin', document.querySelector('#userData-isAdmin').innerHTML === 'True')
+    if (sessionStorage.getItem('loggedIn') === 'true') {
+        sessionStorage.setItem('username', document.querySelector('#nav-username').firstChild.innerHTML);
+        sessionStorage.setItem('isAdmin', document.querySelector('#admin-nav') !== null);
+    
         const createNav = document.querySelector('#create-nav');
         createNav.addEventListener('click', () => {
             // display creation page if nav link is clicked
@@ -89,13 +92,21 @@ function show_previews(clubs) {
         previewContainer.append(image);
 
         if (sessionStorage.getItem('loggedIn') === 'true' && (club.editors.some(user => user.username === sessionStorage.getItem('username')) || sessionStorage.getItem('isAdmin') === 'true')) {
-            const editButton = document.createElement('button');
-            editButton.classList.add('preview-editButton', 'btn', 'btn-primary');
-            editButton.innerHTML = 'Edit Club';
-            editButton.onclick = () => {
-                console.log('edited club! (not yet)');
+            const editContentButton = document.createElement('button');
+            editContentButton.classList.add('preview-editContentButton', 'btn', 'btn-primary');
+            editContentButton.innerHTML = 'Edit Club Content';
+            editContentButton.onclick = () => {
+                console.log('edited club content! (not yet)');
             }
-            previewContainer.append(editButton);
+            previewContainer.append(editContentButton);
+
+            const editEditorsButton = document.createElement('button');
+            editEditorsButton.classList.add('preview-editEditorsButton', 'btn', 'btn-primary');
+            editEditorsButton.innerHTML = 'Change Club Editors';
+            editEditorsButton.onclick = () => {
+                console.log('changed club editors! (not yet)');
+            }
+            previewContainer.append(editEditorsButton);
         }
 
         if (sessionStorage.getItem('clubType') === 'pending') {
@@ -107,6 +118,11 @@ function show_previews(clubs) {
                 approve_club(club.id);
             }
             previewContainer.append(approveButton);
+
+            const timestamp = document.createElement('div');
+            timestamp.classList.add('preview-timestamp');
+            timestamp.innerHTML = 'Added ' + club.timestamp;
+            previewContainer.append(timestamp);
         } else if (sessionStorage.getItem('loggedIn') === 'true' && sessionStorage.getItem('isAdmin') === 'true') {
             previewContainer.append(document.createElement('br'));
             const disapproveButton = document.createElement('button');

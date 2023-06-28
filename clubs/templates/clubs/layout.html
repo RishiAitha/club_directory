@@ -14,13 +14,6 @@
         {% endblock %}
     </head>
     <body>
-        {% if user.is_authenticated %}
-            <div id="userData-container" style="display: none;">
-                <div id="userData-username">{{ user.username }}</div>
-                <div id="userData-isAdmin">{{ user.isAdmin }}</div>
-            </div>
-        {% endif %}
-
         <nav class="navbar navbar-expand-md navbar-dark bg-dark py-3">
             <a class="navbar-brand" href="">Club Directory</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
