@@ -73,6 +73,16 @@ function show_pending() {
     document.querySelector('#clubs-container').innerHTML = '';
     sessionStorage.setItem('clubType', 'pending');
 
+    const adminTitle = document.createElement('h3');
+    adminTitle.id = 'pending-adminTitle';
+    adminTitle.innerHTML = 'Pending Club Requests';
+    document.querySelector('#clubs-container').append(adminTitle);
+
+    const adminInfo = document.createElement('p');
+    adminInfo.id = 'pending-adminInfo';
+    adminInfo.innerHTML = 'Approve clubs if they are suitable for the main page and are real clubs, or change the content to ensure they are suitable. If needed, contact the creator of the club page using their email. Clubs that should not be added can be left on the pending page.'
+    document.querySelector('#clubs-container').append(adminInfo);
+
     fetch('/pending')
     .then(response => response.json())
     .then(clubs => {
@@ -125,9 +135,11 @@ function show_previews(clubs) {
             }
             previewContainer.append(editContentButton);
 
+            previewContainer.append(document.createElement('br'));
+
             const editEditorsButton = document.createElement('button');
             editEditorsButton.classList.add('preview-editEditorsButton', 'btn', 'btn-primary');
-            editEditorsButton.innerHTML = 'Change Club Editors';
+            editEditorsButton.innerHTML = 'Change Authorized Club Editors';
             editEditorsButton.onclick = () => {
                 // display editors interface
                 document.querySelector('#clubs-container').style.display = 'none';
@@ -165,6 +177,11 @@ function show_previews(clubs) {
             timestamp.classList.add('preview-timestamp');
             timestamp.innerHTML = 'Added ' + club.timestamp;
             previewContainer.append(timestamp);
+
+            const creator = document.createElement('div');
+            creator.classList.add('preview-creator');
+            creator.innerHTML = 'Page Added By: ' + club.creator.username + ' -- ' + club.creator.email;
+            previewContainer.append(creator);
         } else if (sessionStorage.getItem('loggedIn') === 'true' && sessionStorage.getItem('isAdmin') === 'true') {
             previewContainer.append(document.createElement('br'));
             const disapproveButton = document.createElement('button');
@@ -232,6 +249,11 @@ function show_club(id) {
         document.querySelector('#single-container').append(interestDisplay);
         
         if (sessionStorage.getItem('loggedIn') === 'true') {
+            const interestButtonInfo = document.createElement('div');
+            interestButtonInfo.id = 'single-interestButtonInfo';
+            interestButtonInfo.innerHTML = 'Are you interested in joining the club?';
+            document.querySelector('#single-container').append(interestButtonInfo);
+
             const interestButton = document.createElement('button');
             interestButton.id = 'single-interestButton';
             interestButton.classList.add('btn', 'btn-primary');

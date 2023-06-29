@@ -8,6 +8,7 @@
 
     <div id="create-container">
         <h3>Add New Club</h3>
+        <h6>A request for the club page will be submitted and approved by a site administrator.</h6>
         <div id="create-errorMessage"></div>
         <form onsubmit="submit_club();return false" id="create-form">
             <div class="form-group">
@@ -47,15 +48,17 @@
     </div>
 
     <div id="editors-container">
-        <h3 id="editors-display">Change Club Editors</h3>
+        <h3 id="editors-display">Change Authorized Club Editors</h3>
+        <hr>
         <div id="editors-errorMessage"></div>
         <h4>Add Editor: </h4>
         <form onsubmit="add_editor();return false" id="editors-add-form">
             <div class="form-group">
-                <input id="editors-add-input" class="form-control" placeholder="TYPE EDITOR'S EMAIL HERE">
+                <input id="editors-add-input" class="form-control" placeholder="Editor Email">
             </div>
             <input type="submit" class="btn btn-primary" value="Confirm Adding Editor">
         </form>
+        <hr>
         <h4>Remove Editor: </h4>
         <form onsubmit="remove_editor();return false" id="editors-remove-form">
             <div class="form-group">
