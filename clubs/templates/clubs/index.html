@@ -19,12 +19,15 @@
             <div class="form-group">
                 <textarea id="create-announcement" class="form-control" placeholder="Club Announcement"></textarea>
             </div>
+            <div class="form-group">
+                <div>--image here--</div>
+            </div>
             <input type="submit" class="btn btn-primary" value="Submit Club Request">
         </form>
     </div>
 
     <div id="edit-container">
-        <h3>Edit Club Content</h3>
+        <h3>Edit Club Page Content</h3>
         <div id="edit-errorMessage"></div>
         <form onsubmit="edit_club();return false" id="edit-form">
             <div class="form-group">
@@ -36,7 +39,29 @@
             <div class="form-group">
                 <textarea id="edit-announcement" class="form-control"></textarea>
             </div>
+            <div class="form-group">
+                <div>--image here--</div>
+            </div>
             <input type="submit" class="btn btn-primary" value="Submit Club Edit">
+        </form>
+    </div>
+
+    <div id="editors-container">
+        <h3 id="editors-display">Change Club Editors</h3>
+        <div id="editors-errorMessage"></div>
+        <h4>Add Editor: </h4>
+        <form onsubmit="add_editor();return false" id="editors-add-form">
+            <div class="form-group">
+                <input id="editors-add-input" class="form-control" placeholder="TYPE EDITOR'S EMAIL HERE">
+            </div>
+            <input type="submit" class="btn btn-primary" value="Confirm Adding Editor">
+        </form>
+        <h4>Remove Editor: </h4>
+        <form onsubmit="remove_editor();return false" id="editors-remove-form">
+            <div class="form-group">
+                <select id="editors-remove-input" class="form-control">
+            </div>
+            <input type="submit" class="btn btn-primary" value="Confirm Removing Editor">
         </form>
     </div>
 

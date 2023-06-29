@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function() { // on start
     document.querySelector('#single-container').style.display = 'none';
     document.querySelector('#create-container').style.display = 'none';
     document.querySelector('#edit-container').style.display = 'none';
+    document.querySelector('#editors-container').style.display = 'none';
     
     // initialize session storage
     sessionStorage.setItem('messagePage', 1);
@@ -24,6 +25,7 @@ document.addEventListener('DOMContentLoaded', function() { // on start
             document.querySelector('#single-container').style.display = 'none';
             document.querySelector('#create-container').style.display = 'block';
             document.querySelector('#edit-container').style.display = 'none';
+            document.querySelector('#editors-container').style.display = 'none';
 
             // clear creation fields
             document.querySelector('#create-title').value = '';
@@ -48,6 +50,7 @@ function show_approved() { // show all approved clubs
     document.querySelector('#single-container').style.display = 'none';
     document.querySelector('#create-container').style.display = 'none';
     document.querySelector('#edit-container').style.display = 'none';
+    document.querySelector('#editors-container').style.display = 'none';
 
     document.querySelector('#clubs-container').innerHTML = '';
     sessionStorage.setItem('clubType', 'approved');
@@ -65,6 +68,7 @@ function show_pending() {
     document.querySelector('#single-container').style.display = 'none';
     document.querySelector('#create-container').style.display = 'none';
     document.querySelector('#edit-container').style.display = 'none';
+    document.querySelector('#editors-container').style.display = 'none';
     
     document.querySelector('#clubs-container').innerHTML = '';
     sessionStorage.setItem('clubType', 'pending');
@@ -105,13 +109,14 @@ function show_previews(clubs) {
         if (sessionStorage.getItem('loggedIn') === 'true' && (club.editors.some(user => user.username === sessionStorage.getItem('username')) || sessionStorage.getItem('isAdmin') === 'true')) {
             const editContentButton = document.createElement('button');
             editContentButton.classList.add('preview-editContentButton', 'btn', 'btn-primary');
-            editContentButton.innerHTML = 'Edit Club Content';
+            editContentButton.innerHTML = 'Edit Club Page Content';
             editContentButton.onclick = () => {
                 // display editing interface
                 document.querySelector('#clubs-container').style.display = 'none';
                 document.querySelector('#single-container').style.display = 'none';
                 document.querySelector('#create-container').style.display = 'none';
                 document.querySelector('#edit-container').style.display = 'block';
+                document.querySelector('#editors-container').style.display = 'none';
 
                 document.querySelector('#edit-title').value = club.title;
                 document.querySelector('#edit-description').value = club.description;
@@ -124,7 +129,24 @@ function show_previews(clubs) {
             editEditorsButton.classList.add('preview-editEditorsButton', 'btn', 'btn-primary');
             editEditorsButton.innerHTML = 'Change Club Editors';
             editEditorsButton.onclick = () => {
-                console.log('changed club editors! (not yet)');
+                // display editors interface
+                document.querySelector('#clubs-container').style.display = 'none';
+                document.querySelector('#single-container').style.display = 'none';
+                document.querySelector('#create-container').style.display = 'none';
+                document.querySelector('#edit-container').style.display = 'none';
+                document.querySelector('#editors-container').style.display = 'block';
+
+                // field presets
+                document.querySelector('#editors-add-input').value = '';
+                document.querySelector('#editors-display').innerHTML = 'Change Club Editors -- ' + club.title;
+
+                document.querySelector('#editors-remove-input').innerHTML = '';
+                club.editors.forEach(editor => {
+                    const option = document.createElement('option');
+                    option.text = editor.email;
+                    document.querySelector('#editors-remove-input').add(option);
+                });
+                sessionStorage.setItem('editing', club.id);
             }
             previewContainer.append(editEditorsButton);
         }
@@ -164,6 +186,7 @@ function show_club(id) {
     document.querySelector('#single-container').style.display = 'block';
     document.querySelector('#create-container').style.display = 'none';
     document.querySelector('#edit-container').style.display = 'none';
+    document.querySelector('#editors-container').style.display = 'none';
 
     fetch(`/club/${id}`)
     .then(response => response.json())
@@ -525,6 +548,55 @@ function edit_club() {
         });
     }
     return false;
+}
+
+function add_editor() {
+    if (document.querySelector('#editors-add-input').value === '') {
+        document.querySelector('#editors-errorMessage').innerHTML = 'Email must be provided to add editor.';
+    } else {
+        fetch('/edit/editors', {
+            method: 'PUT',
+            body: JSON.stringify({
+                clubID: parseInt(sessionStorage.getItem('editing')),
+                editorEmail: document.querySelector('#editors-add-input').value
+            })
+        })
+        .then(response => response.json())
+        .then(result => {
+            console.log(result);
+            let email = document.querySelector('#editors-add-input').value;
+            let invalidEmail = result.error === `User with email ${email} does not exist`;
+            if (invalidEmail) {
+                // invalid email inputted
+                document.querySelector('#editors-errorMessage').innerHTML = `User with email \"${email}\" does not exist.`;
+            } else {
+                document.querySelector('#editors-errorMessage').innerHTML = '';
+                document.querySelector('#editors-add-input').value = '';
+                document.querySelector('#editors-remove-input').innerHTML = '';
+                sessionStorage.setItem('editing', -1);
+                show_approved();
+            }
+        })
+    }
+}
+
+function remove_editor() {
+    fetch('edit/editors', {
+        method: 'PUT',
+        body: JSON.stringify({
+            clubID: parseInt(sessionStorage.getItem('editing')),
+            editorEmail: document.querySelector('#editors-remove-input').value
+        })
+    })
+    .then(response => response.json())
+    .then(result => {
+        console.log(result);
+        document.querySelector('#editors-errorMessage').innerHTML = '';
+        document.querySelector('#editors-add-input').value = '';
+        document.querySelector('#editors-remove-input').innerHTML = '';
+        sessionStorage.setItem('editing', -1);
+        show_approved();
+    })
 }
 
 function toggle_interest(interested, clubID) {

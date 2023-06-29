@@ -188,7 +188,7 @@ def edit_editors(request):
     if request.method == "PUT":
         data = json.loads(request.body)
         clubID = data.get("clubID", "")
-        editorEmails = [email.strip() for email in data.get("editors").split(",")] # format in javascript
+        editorEmail = data.get("editorEmail", "")
 
         club = None
         if Club.objects.filter(pk=clubID).exists():
@@ -197,22 +197,19 @@ def edit_editors(request):
             return JsonResponse({"error": "Club does not exist"}, status=400)
         
         if club.editors.contains(request.user) or request.user.isAdmin:
-            newEditors = []
-            for editorEmail in editorEmails:
-                try:
-                    user = User.objects.get(email=editorEmail)
-                    newEditors.append(user)
-                except User.DoesNotExist:
-                    return JsonResponse({"error": f"User with email {editorEmail} does not exist"}, status=400)
-            if newEditors:
-                club.editors.clear()
-                for editor in newEditors:
-                    club.editors.add(editor)
-                club.save()
+            try:
+                editor = User.objects.get(email=editorEmail)
+            except User.DoesNotExist:
+                return JsonResponse({"error": f"User with email {editorEmail} does not exist"}, status=400)
 
-                return JsonResponse(club.serialize(), safe=False)
+            if club.editors.contains(editor):
+                # removing existing editor
+                club.editors.remove(editor)
             else:
-                return JsonResponse({"error": "No editors specified"}, status=400)
+                # adding new editor
+                club.editors.add(editor)
+
+            return JsonResponse(club.serialize(), safe=False)
         else:
             return JsonResponse({"error": "Current user is not authorized to change editors"}, status=400)
     else:
