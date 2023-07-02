@@ -92,6 +92,7 @@ function show_pending() {
 
 function show_previews(clubs) {
     clubs.forEach(club => {
+        console.log(club);
         const previewContainer = document.createElement('div');
         previewContainer.classList.add('preview-container');
 
@@ -110,11 +111,14 @@ function show_previews(clubs) {
             previewContainer.append(announcement);
         }
 
-        // may need to add if statement like announcements
-        const image = document.createElement('div');
-        image.innerHTML = '--image here--'
-        image.classList.add('preview-image');
-        previewContainer.append(image);
+        if (club.image) {
+            const image = document.createElement('img');
+            image.src = club.image;
+            image.classList.add('preview-image');
+            previewContainer.append(image);
+
+            previewContainer.append(document.createElement('br'));
+        }
 
         if (sessionStorage.getItem('loggedIn') === 'true' && (club.editors.some(user => user.username === sessionStorage.getItem('username')) || sessionStorage.getItem('isAdmin') === 'true')) {
             const editContentButton = document.createElement('button');
@@ -235,64 +239,67 @@ function show_club(id) {
             document.querySelector('#single-container').append(announcement);
         }
 
-        // may need to add if statement like announcements
-        const image = document.createElement('div');
-        image.id = 'single-image';
-        image.innerHTML = '--image here--';
-        document.querySelector('#single-container').append(image);
-
-        document.querySelector('#single-container').append(document.createElement('hr'));
-
-        const interestDisplay = document.createElement('h4');
-        interestDisplay.id = 'single-interestDisplay';
-        interestDisplay.innerHTML = 'Interested Users Count: ' + club.interestCount;
-        document.querySelector('#single-container').append(interestDisplay);
-        
-        if (sessionStorage.getItem('loggedIn') === 'true') {
-            const interestButtonInfo = document.createElement('div');
-            interestButtonInfo.id = 'single-interestButtonInfo';
-            interestButtonInfo.innerHTML = 'Are you interested in joining the club?';
-            document.querySelector('#single-container').append(interestButtonInfo);
-
-            const interestButton = document.createElement('button');
-            interestButton.id = 'single-interestButton';
-            interestButton.classList.add('btn', 'btn-primary');
-            if (!club.interestedUsers.some(user => user.username === sessionStorage.getItem('username'))) {
-                // not interested yet
-                interestButton.innerHTML = 'Mark as Interesting';
-                interestButton.onclick = () => {
-                    toggle_interest(true, club.id);
-                }
-            } else {
-                // already interested
-                interestButton.innerHTML = 'Remove Interest';
-                interestButton.onclick = () => {
-                    toggle_interest(false, club.id);
-                }
-            }
-            document.querySelector('#single-container').append(interestButton);
+        if (club.image) {
+            const image = document.createElement('img');
+            image.id = 'single-image';
+            image.src = club.image;
+            document.querySelector('#single-container').append(image);
         }
 
         document.querySelector('#single-container').append(document.createElement('hr'));
-        
-        const messageLabel = document.createElement('h3');
-        messageLabel.id = 'single-messageLabel';
-        messageLabel.innerHTML = 'Message Board:';
-        document.querySelector('#single-container').append(messageLabel);
 
-        if (sessionStorage.getItem('loggedIn') == 'true') {
-            const postContainer = document.querySelector('#post-container').cloneNode(true);
-            postContainer.style.display = 'block'; // variable assigned above
-            document.querySelector('#single-container').appendChild(postContainer);
-            document.querySelector('#post-form').onsubmit = () => {
-                post_message(club.id);
-                return false;
-            }
+        if (sessionStorage.getItem('clubType') !== 'pending') {
+            const interestDisplay = document.createElement('h4');
+            interestDisplay.id = 'single-interestDisplay';
+            interestDisplay.innerHTML = 'Interested Users Count: ' + club.interestCount;
+            document.querySelector('#single-container').append(interestDisplay);
             
+            if (sessionStorage.getItem('loggedIn') === 'true') {
+                const interestButtonInfo = document.createElement('div');
+                interestButtonInfo.id = 'single-interestButtonInfo';
+                interestButtonInfo.innerHTML = 'Are you interested in joining the club?';
+                document.querySelector('#single-container').append(interestButtonInfo);
+
+                const interestButton = document.createElement('button');
+                interestButton.id = 'single-interestButton';
+                interestButton.classList.add('btn', 'btn-primary');
+                if (!club.interestedUsers.some(user => user.username === sessionStorage.getItem('username'))) {
+                    // not interested yet
+                    interestButton.innerHTML = 'Mark as Interesting';
+                    interestButton.onclick = () => {
+                        toggle_interest(true, club.id);
+                    }
+                } else {
+                    // already interested
+                    interestButton.innerHTML = 'Remove Interest';
+                    interestButton.onclick = () => {
+                        toggle_interest(false, club.id);
+                    }
+                }
+                document.querySelector('#single-container').append(interestButton);
+            }
+
             document.querySelector('#single-container').append(document.createElement('hr'));
+            
+            const messageLabel = document.createElement('h3');
+            messageLabel.id = 'single-messageLabel';
+            messageLabel.innerHTML = 'Message Board:';
+            document.querySelector('#single-container').append(messageLabel);
+
+            if (sessionStorage.getItem('loggedIn') == 'true') {
+                const postContainer = document.querySelector('#post-container').cloneNode(true);
+                postContainer.style.display = 'block'; // variable assigned above
+                document.querySelector('#single-container').appendChild(postContainer);
+                document.querySelector('#post-form').onsubmit = () => {
+                    post_message(club.id);
+                    return false;
+                }
+                
+                document.querySelector('#single-container').append(document.createElement('hr'));
+            }
+            const postReplyContainer = document.querySelector('#postReply-container').cloneNode(true);
+            show_messages(club.id, postReplyContainer);
         }
-        const postReplyContainer = document.querySelector('#postReply-container').cloneNode(true);
-        show_messages(club.id, postReplyContainer);
     });
 }
 

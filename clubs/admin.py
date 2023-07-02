@@ -7,7 +7,7 @@ class UserAdmin(admin.ModelAdmin):
     list_display = ("id", "email", "username", "isAdmin")
 
 class ClubAdmin(admin.ModelAdmin):
-    list_display = ("id", "title", "interestCount", "creator")
+    list_display = ("id", "title", "interestCount", "creator", "image")
     filter_horizontal = ("interestedUsers", "editors", "messages")
 
 class MessageAdmin(admin.ModelAdmin):

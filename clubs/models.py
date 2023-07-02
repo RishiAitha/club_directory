@@ -21,9 +21,9 @@ class Club(models.Model):
     title = models.CharField(max_length=64)
     description = models.TextField(blank=True)
     announcement = models.TextField(blank=True)
-    # Image Field
+    image = models.ImageField(upload_to="images/", blank=True, null=True)
     interestCount = models.IntegerField(default=0)
-    interestedUsers = models.ManyToManyField("User", related_name="interestingClubs")
+    interestedUsers = models.ManyToManyField("User", related_name="interestingClubs", blank=True)
     editors = models.ManyToManyField("User", related_name="clubsEditing", blank=True)
     creator = models.ForeignKey("User", on_delete=models.PROTECT, related_name="clubsCreated")
     messages = models.ManyToManyField("Message", related_name="clubs", blank=True)
@@ -34,12 +34,11 @@ class Club(models.Model):
         return f"CLUB{self.id} - {self.title}"
     
     def serialize(self):
-        return {
+        data = {
             "id": self.id,
             "title": self.title,
             "description": self.description,
             "announcement": self.announcement,
-            # Image Field
             "interestCount": self.interestCount,
             "interestedUsers": [user.serialize() for user in self.interestedUsers.all()],
             "editors": [user.serialize() for user in self.editors.all()],
@@ -48,6 +47,10 @@ class Club(models.Model):
             "timestamp": self.timestamp.strftime("%b %d %Y, %I: %M %p"),
             "isApproved": self.isApproved
         }
+
+        data['image'] = self.image.url if self.image else None
+
+        return data
 
 class Message(models.Model):
     content = models.TextField(blank=True)
