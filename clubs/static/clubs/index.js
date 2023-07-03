@@ -32,6 +32,29 @@ document.addEventListener('DOMContentLoaded', function() { // on start
             document.querySelector('#create-description').value = '';
             document.querySelector('#create-announcement').value = '';
             document.querySelector('#create-errorMessage').innerHTML = '';
+            document.querySelector('#create-image-input').value = '';
+
+            // setup image input
+            document.querySelector('#create-image-input').addEventListener('change', (event) => {
+                // show image preview
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        document.querySelector('#create-image-preview').src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+
+                    document.querySelector('#create-image-remove').style.display = 'block';
+                    document.querySelector('#create-image-remove').onclick = () => {
+                        document.querySelector('#create-image-input').value = '';
+                        document.querySelector('#create-image-preview').src = '#';
+                        document.querySelector('#create-image-remove').style.display = 'none';
+                    }
+                } else {
+                    document.querySelector('#create-image-preview').src = '#';
+                }
+            });
         });
 
         if (sessionStorage.getItem('isAdmin') === 'true') {
@@ -135,7 +158,33 @@ function show_previews(clubs) {
                 document.querySelector('#edit-title').value = club.title;
                 document.querySelector('#edit-description').value = club.description;
                 document.querySelector('#edit-announcement').value = club.announcement;
+                document.querySelector('#edit-image-input').value = '';
+                document.querySelector('#edit-image-preview').src = '#';
+                document.querySelector('#edit-image-remove').style.display = 'none';
+                document.querySelector('#edit-image-none').checked = false;
+
+                
                 sessionStorage.setItem('editing', club.id);
+
+                document.querySelector('#edit-image-input').addEventListener('change', (event) => {
+                    const file = event.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                            document.querySelector('#edit-image-preview').src = e.target.result;
+                        }
+                        reader.readAsDataURL(file);
+
+                        document.querySelector('#edit-image-remove').style.display = 'block';
+                        document.querySelector('#edit-image-remove').onclick = () => {
+                            document.querySelector('#edit-image-input').value = '';
+                            document.querySelector('#edit-image-preview').src = '#';
+                            document.querySelector('#edit-image-remove').style.display = 'none';
+                        };
+                    } else {
+                        document.querySelector('#edit-image-preview').src = '#';
+                    }
+                });
             }
             previewContainer.append(editContentButton);
 
@@ -491,13 +540,16 @@ function submit_club() { // send request to add club if input is valid
     } else if (document.querySelector('#create-description').value === '') {
         document.querySelector('#create-errorMessage').innerHTML = 'Club must have description.';
     } else {
+        const formData = new FormData(document.querySelector('#create-form'));
+        const file = document.querySelector('#create-image-input').files[0];
+        formData.append('title', document.querySelector('#create-title').value);
+        formData.append('description', document.querySelector('#create-description').value);
+        formData.append('announcement', document.querySelector('#create-announcement').value);
+        formData.append('image', file);
+
         fetch('/create', {
             method: 'POST',
-            body: JSON.stringify({
-                title: document.querySelector('#create-title').value,
-                description: document.querySelector('#create-description').value,
-                announcement: document.querySelector('#create-announcement').value
-            })
+            body: formData
         })
         .then(response => response.json())
         .then(result => {
@@ -559,13 +611,17 @@ function edit_club() {
     if (document.querySelector('#edit-description').value === '') {
         document.querySelector('#edit-errorMessage').innerHTML = 'Club must have description.';
     } else {
+        const formData = new FormData(document.querySelector('#edit-form'));
+        const file = document.querySelector('#edit-image-input').files[0];
+        formData.append('clubID', parseInt(sessionStorage.getItem('editing')));
+        formData.append('description', document.querySelector('#edit-description').value);
+        formData.append('announcement', document.querySelector('#edit-announcement').value);
+        formData.append('noImage', document.querySelector('#edit-image-none').checked);
+        formData.append('image', file);
+
         fetch('/edit/content', {
-            method: 'PUT',
-            body: JSON.stringify({
-                clubID: parseInt(sessionStorage.getItem('editing')),
-                description: document.querySelector('#edit-description').value,
-                announcement: document.querySelector('#edit-announcement').value
-            })
+            method: 'POST', // uses post because of Django issues
+            body: formData
         })
         .then(response => response.json())
         .then(result => {

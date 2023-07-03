@@ -20,8 +20,11 @@
             <div class="form-group">
                 <textarea id="create-announcement" class="form-control" placeholder="Club Announcement"></textarea>
             </div>
-            <div class="form-group">
-                <div>--image here--</div>
+            <div id="create-image-container" class="form-group">
+                <input type="file" id="create-image-input" accept="image/*">
+                <button type="button" id="create-image-remove" class="btn btn-primary" style="display: none;">Remove Image</button>
+                <br>
+                <img id="create-image-preview" src="#" alt="">
             </div>
             <input type="submit" class="btn btn-primary" value="Submit Club Request">
         </form>
@@ -40,8 +43,15 @@
             <div class="form-group">
                 <textarea id="edit-announcement" class="form-control" placeholder="Club Announcement"></textarea>
             </div>
-            <div class="form-group">
-                <div>--image here--</div>
+            <div id="edit-image-container" class="form-group">
+                <h6 id="edit-image-info">Upload New Image</h6>
+                <input type="file" id="edit-image-input" accept="image/*">
+                <button type="button" id="edit-image-remove" class="btn btn-primary" style="display: none;">Cancel Uploaded Image</button>
+                <img id="edit-image-preview" src="#" alt="">
+                <hr>
+                <label id="edit-image-label">
+                    <input type="checkbox" id="edit-image-none" />  Select this to have no image on the club page (overrides uploaded image).
+                </label>
             </div>
             <input type="submit" class="btn btn-primary" value="Submit Club Edit">
         </form>

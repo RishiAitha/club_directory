@@ -31,7 +31,7 @@ div {
     margin-bottom: 2.5px;
 }
 
-.preview-image {
+#create-image-preview, #edit-image-preview, .preview-image {
     max-width: 400px;
     max-height: 300px;
 }
@@ -39,4 +39,9 @@ div {
 #single-image {
     max-width: 65%;
     max-height: 400px;
+}
+
+#create-image-remove, #edit-image-remove {
+    margin-top: 5px;
+    margin-bottom: 5px;
 }

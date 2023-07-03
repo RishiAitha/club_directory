@@ -111,16 +111,21 @@ def messages(request, clubID, page):
 @login_required
 def create_club(request):
     if request.method == "POST":
-        data = json.loads(request.body)
-        title = data.get("title", "")
-        description = data.get("description", "")
-        announcement = data.get("announcement", "")
+        title = request.POST.get("title", "")
+        description = request.POST.get("description", "")
+        announcement = request.POST.get("announcement", "")
         creator = request.user
+
+        imageFile = request.FILES.get("image")
         
         club = Club(title=title, description=description, announcement=announcement, creator=creator)
         club.save()
         club.editors.add(creator)
         club.save()
+
+        if imageFile:
+            club.image = imageFile
+            club.save()
 
         return JsonResponse(club.serialize(), safe=False)
     else:
@@ -129,12 +134,13 @@ def create_club(request):
 @csrf_exempt
 @login_required
 def edit_content(request): # edit description, announcement, and image
-    if request.method == "PUT":
-        data = json.loads(request.body)
-        clubID = data.get("clubID", "")
-        description = data.get("description", "")
-        announcement = data.get("announcement", "")
-        # GET IMAGE HERE
+    if request.method == "POST": # accepts POST due to issues with file uploads on PUT requests
+        clubID = request.POST.get("clubID", "")
+        description = request.POST.get("description", "")
+        announcement = request.POST.get("announcement", "")
+        noImage = request.POST.get("noImage", "").lower()
+        
+        imageFile = request.FILES.get("image")
 
         club = None
         if Club.objects.filter(pk=clubID).exists():
@@ -147,11 +153,21 @@ def edit_content(request): # edit description, announcement, and image
             club.announcement = announcement
             club.save()
 
+            if noImage == "true":
+                # club page should have no image at all
+                club.image = None
+                club.save()
+            else:
+                # club page can have an image
+                if imageFile:
+                    club.image = imageFile
+                    club.save()
+
             return JsonResponse(club.serialize(), safe=False)
         else:
             return JsonResponse({"error": "Current user is not authorized to change club content"})
     else:
-        return JsonResponse({"error": "PUT request required for edit/content  url"}, status=400)
+        return JsonResponse({"error": "POST request required for edit/content url"}, status=400)
 
 @csrf_exempt
 @login_required
