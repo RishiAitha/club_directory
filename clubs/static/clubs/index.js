@@ -129,7 +129,7 @@ function show_previews(clubs) {
 
         if (club.announcement != '') {
             const announcement = document.createElement('div');
-            announcement.innerHTML = 'Announcement: ' + club.announcement;
+            announcement.innerHTML = 'Announcement(s): ' + club.announcement;
             announcement.classList.add('preview-announcement');
             previewContainer.append(announcement);
         }
@@ -279,7 +279,7 @@ function show_club(id) {
         if (club.announcement != '') {
             const announcementLabel = document.createElement('h3');
             announcementLabel.id = 'single-announcementLabel';
-            announcementLabel.innerHTML = 'Announcement:';
+            announcementLabel.innerHTML = 'Announcement(s):';
             document.querySelector('#single-container').append(announcementLabel);
 
             const announcement = document.createElement('h4');
