@@ -640,7 +640,7 @@ function add_editor() {
         document.querySelector('#editors-errorMessage').innerHTML = 'Email must be provided to add editor.';
     } else {
         fetch('/edit/editors', {
-            method: 'PUT',
+            method: 'PATCH',
             body: JSON.stringify({
                 clubID: parseInt(sessionStorage.getItem('editing')),
                 editorEmail: document.querySelector('#editors-add-input').value
@@ -667,7 +667,7 @@ function add_editor() {
 
 function remove_editor() {
     fetch('edit/editors', {
-        method: 'PUT',
+        method: 'PATCH',
         body: JSON.stringify({
             clubID: parseInt(sessionStorage.getItem('editing')),
             editorEmail: document.querySelector('#editors-remove-input').value
@@ -686,7 +686,7 @@ function remove_editor() {
 
 function toggle_interest(interested, clubID) {
     fetch('/edit/interest', {
-        method: 'PUT',
+        method: 'PATCH',
         body: JSON.stringify({
             clubID: clubID
         })
@@ -711,7 +711,7 @@ function toggle_interest(interested, clubID) {
 
 function approve_club(clubID) {
     fetch('/edit/approval', {
-        method: 'PUT',
+        method: 'PATCH',
         body: JSON.stringify({
             clubID: clubID,
             approval: true
@@ -726,7 +726,7 @@ function approve_club(clubID) {
 
 function disapprove_club(clubID) {
     fetch('/edit/approval', {
-        method: 'PUT',
+        method: 'PATCH',
         body: JSON.stringify({
             clubID: clubID,
             approval: false

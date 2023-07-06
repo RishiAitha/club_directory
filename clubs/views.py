@@ -134,7 +134,7 @@ def create_club(request):
 @csrf_exempt
 @login_required
 def edit_content(request): # edit description, announcement, and image
-    if request.method == "POST": # accepts POST due to issues with file uploads on PUT requests
+    if request.method == "POST": # accepts POST due to issues with file uploads on PUT/PATCH requests
         clubID = request.POST.get("clubID", "")
         description = request.POST.get("description", "")
         announcement = request.POST.get("announcement", "")
@@ -172,7 +172,7 @@ def edit_content(request): # edit description, announcement, and image
 @csrf_exempt
 @login_required
 def edit_interest(request):
-    if request.method == "PUT":
+    if request.method == "PATCH":
         data = json.loads(request.body)
         clubID = data.get("clubID", "")
         user = request.user
@@ -196,12 +196,12 @@ def edit_interest(request):
         
         return JsonResponse(club.serialize(), safe=False)
     else:
-        return JsonResponse({"error": "PUT request required for edit/interest url"}, status=400)
+        return JsonResponse({"error": "PATCH request required for edit/interest url"}, status=400)
 
 @csrf_exempt
 @login_required
 def edit_editors(request):
-    if request.method == "PUT":
+    if request.method == "PATCH":
         data = json.loads(request.body)
         clubID = data.get("clubID", "")
         editorEmail = data.get("editorEmail", "")
@@ -229,12 +229,12 @@ def edit_editors(request):
         else:
             return JsonResponse({"error": "Current user is not authorized to change editors"}, status=400)
     else:
-        return JsonResponse({"error": "PUT request required for edit/editors url"}, status=400)
+        return JsonResponse({"error": "PATCH request required for edit/editors url"}, status=400)
 
 @csrf_exempt
 @login_required
 def edit_approval(request):
-    if request.method == "PUT":
+    if request.method == "PATCH":
         data = json.loads(request.body)
         clubID = data.get("clubID", "")
         approval = data.get("approval", "")
@@ -253,7 +253,7 @@ def edit_approval(request):
         else:
             return JsonResponse({"error": "Current user is not authorized to approve club"}, status=400)
     else:
-        return JsonResponse({"error": "PUT request required for edit/approval url"}, status=400)
+        return JsonResponse({"error": "PATCH request required for edit/approval url"}, status=400)
 
 @csrf_exempt
 @login_required
