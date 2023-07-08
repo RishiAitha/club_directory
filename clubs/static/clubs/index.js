@@ -68,6 +68,7 @@ document.addEventListener('DOMContentLoaded', function() { // on start
             })
         }
     }
+
     show_approved(); // start by showing approved clubs
 });
 
@@ -101,7 +102,7 @@ function show_pending() { // show all pending clubs
     sessionStorage.setItem('clubType', 'pending');
 
     // show more information for pending requests
-    const adminTitle = document.createElement('h3');
+    const adminTitle = document.createElement('h2');
     adminTitle.id = 'pending-adminTitle';
     adminTitle.innerHTML = 'Pending Club Requests';
     document.querySelector('#clubs-container').append(adminTitle);
@@ -125,7 +126,7 @@ function show_previews(clubs) { // show a preview of a club
         const previewContainer = document.createElement('div'); // hold all info here
         previewContainer.classList.add('preview-container');
 
-        const title = document.createElement('h4'); // display title of club
+        const title = document.createElement('h1'); // display title of club
         title.innerHTML = club.title;
         title.classList.add('preview-title');
         title.addEventListener('click', function() { // show club page when title is clicked
@@ -134,7 +135,7 @@ function show_previews(clubs) { // show a preview of a club
         previewContainer.append(title);
 
         if (club.announcement != '') {
-            const announcement = document.createElement('div'); // show club announcement if possible
+            const announcement = document.createElement('h4'); // show club announcement if possible
             announcement.innerHTML = 'Announcement(s): ' + club.announcement;
             announcement.classList.add('preview-announcement');
             previewContainer.append(announcement);
@@ -144,6 +145,10 @@ function show_previews(clubs) { // show a preview of a club
             const image = document.createElement('img'); // display club image if possible
             image.src = club.image;
             image.classList.add('preview-image');
+            image.addEventListener('click', function() { // show club page when image is clicked
+                show_club(club.id);
+            });
+
             previewContainer.append(image);
 
             previewContainer.append(document.createElement('br'));
@@ -153,7 +158,7 @@ function show_previews(clubs) { // show a preview of a club
         if (sessionStorage.getItem('loggedIn') === 'true' && (club.editors.some(user => user.username === sessionStorage.getItem('username')) || sessionStorage.getItem('isAdmin') === 'true')) {
             // allow user to edit club page content
             const editContentButton = document.createElement('button');
-            editContentButton.classList.add('preview-editContentButton', 'btn', 'btn-primary');
+            editContentButton.classList.add('preview-editContentButton', 'btn', 'btn-primary', 'btn-lg');
             editContentButton.innerHTML = 'Edit Club Page Content';
             editContentButton.onclick = () => {
                 // display editing interface
@@ -201,7 +206,7 @@ function show_previews(clubs) { // show a preview of a club
 
             // allow user to change authorized club editors
             const editEditorsButton = document.createElement('button');
-            editEditorsButton.classList.add('preview-editEditorsButton', 'btn', 'btn-primary');
+            editEditorsButton.classList.add('preview-editEditorsButton', 'btn', 'btn-primary', 'btn-lg');
             editEditorsButton.innerHTML = 'Change Authorized Club Editors';
             editEditorsButton.onclick = () => {
                 // display editors interface
@@ -231,7 +236,7 @@ function show_previews(clubs) { // show a preview of a club
             // set up approval option for admins
             previewContainer.append(document.createElement('br'));
             const approveButton = document.createElement('button');
-            approveButton.classList.add('preview-approveButton', 'btn', 'btn-primary');
+            approveButton.classList.add('preview-approveButton', 'btn', 'btn-primary', 'btn-lg');
             approveButton.innerHTML = 'Approve Club';
             approveButton.onclick = () => { // approve club when clicked
                 approve_club(club.id);
@@ -239,12 +244,12 @@ function show_previews(clubs) { // show a preview of a club
             previewContainer.append(approveButton);
 
             // display extra admin info
-            const timestamp = document.createElement('div');
+            const timestamp = document.createElement('p');
             timestamp.classList.add('preview-timestamp');
             timestamp.innerHTML = 'Added ' + club.timestamp;
             previewContainer.append(timestamp);
 
-            const creator = document.createElement('div');
+            const creator = document.createElement('p');
             creator.classList.add('preview-creator');
             creator.innerHTML = 'Page Added By: ' + club.creator.username + ' -- ' + club.creator.email;
             previewContainer.append(creator);
@@ -252,7 +257,7 @@ function show_previews(clubs) { // show a preview of a club
             // set up disapproval option for admins
             previewContainer.append(document.createElement('br'));
             const disapproveButton = document.createElement('button');
-            disapproveButton.classList.add('preview-disapproveButton', 'btn', 'btn-primary');
+            disapproveButton.classList.add('preview-disapproveButton', 'btn', 'btn-primary', 'btn-lg');
             disapproveButton.innerHTML = 'Remove Club Approval';
             disapproveButton.onclick = () => { // disapprove club when clicked
                 disapprove_club(club.id);
@@ -276,60 +281,82 @@ function show_club(id) { // show a page for a club
     fetch(`/club/${id}`) // get club info
     .then(response => response.json())
     .then(club => {
-        const title = document.createElement('h2'); // show title of club
+        const title = document.createElement('h1'); // show title of club
         title.id = 'single-title';
         title.innerHTML = club.title;
         document.querySelector('#single-container').append(title);
 
+        const infoContainer = document.createElement('div');
+        infoContainer.id = 'single-infoContainer';
+        document.querySelector('#single-container').append(infoContainer);
+
+        const descriptionContainer = document.createElement('div');
+        descriptionContainer.id = 'single-descriptionContainer';
+        infoContainer.append(descriptionContainer);
+
         const descriptionLabel = document.createElement('h3'); // indicate club description
         descriptionLabel.id = 'single-descriptionLabel';
         descriptionLabel.innerHTML = 'Description:';
-        document.querySelector('#single-container').append(descriptionLabel);
+        descriptionContainer.append(descriptionLabel);
 
-        const description = document.createElement('h4'); // show club description
+        const description = document.createElement('p'); // show club description
         description.id = 'single-description';
         description.innerHTML = club.description;
-        document.querySelector('#single-container').append(description);
+        descriptionContainer.append(description);
 
         if (club.announcement != '') {
+            const announcementContainer = document.createElement('div');
+            announcementContainer.id = 'single-announcementContainer';
+            infoContainer.append(announcementContainer);
+
             const announcementLabel = document.createElement('h3'); // indicate club announcement if needed
             announcementLabel.id = 'single-announcementLabel';
             announcementLabel.innerHTML = 'Announcement(s):';
-            document.querySelector('#single-container').append(announcementLabel);
+            announcementContainer.append(announcementLabel);
 
-            const announcement = document.createElement('h4'); // show club announcement if possible
+            const announcement = document.createElement('p'); // show club announcement if possible
             announcement.id = 'single-announcement';
             announcement.innerHTML = club.announcement;
-            document.querySelector('#single-container').append(announcement);
+            announcementContainer.append(announcement);
         }
 
         if (club.image) {
+            const imageContainer = document.createElement('div');
+            imageContainer.id = 'single-imageContainer';
+            document.querySelector('#single-container').append(imageContainer);
+
+            imageContainer.append(document.createElement('br'));
+
             const image = document.createElement('img'); // display club image if possible
             image.id = 'single-image';
             image.src = club.image;
-            document.querySelector('#single-container').append(image);
+            imageContainer.append(image);
         }
-
-        document.querySelector('#single-container').append(document.createElement('hr'));
         
         // if clubs being displayed are not pending clubs, allow general interaction
         // otherwise general interaction should not be possible since the club is not in the main page yet
         if (sessionStorage.getItem('clubType') !== 'pending') {
-            const interestDisplay = document.createElement('h4'); // show current number of interested users
+            document.querySelector('#single-container').append(document.createElement('hr'));
+
+            const interestContainer = document.createElement('div');
+            interestContainer.id = 'single-interestContainer';
+            document.querySelector('#single-container').append(interestContainer);
+
+            const interestDisplay = document.createElement('h3'); // show current number of interested users
             interestDisplay.id = 'single-interestDisplay';
             interestDisplay.innerHTML = 'Interested Users Count: ' + club.interestCount;
-            document.querySelector('#single-container').append(interestDisplay);
+            interestContainer.append(interestDisplay);
             
             // allow user to mark a club as interesting
             if (sessionStorage.getItem('loggedIn') === 'true') {
-                const interestButtonInfo = document.createElement('div'); // indicate how interest button works
+                const interestButtonInfo = document.createElement('p'); // indicate how interest button works
                 interestButtonInfo.id = 'single-interestButtonInfo';
                 interestButtonInfo.innerHTML = 'Are you interested in joining the club?';
-                document.querySelector('#single-container').append(interestButtonInfo);
+                interestContainer.append(interestButtonInfo);
 
                 const interestButton = document.createElement('button');
                 interestButton.id = 'single-interestButton';
-                interestButton.classList.add('btn', 'btn-primary');
+                interestButton.classList.add('btn', 'btn-primary', 'btn-lg');
                 if (!club.interestedUsers.some(user => user.username === sessionStorage.getItem('username'))) { // checks if user is interested or not
                     // not interested yet
                     interestButton.innerHTML = 'Mark as Interesting';
@@ -343,12 +370,23 @@ function show_club(id) { // show a page for a club
                         toggle_interest(false, club.id);
                     }
                 }
-                document.querySelector('#single-container').append(interestButton);
+                interestContainer.append(interestButton);
             }
 
             document.querySelector('#single-container').append(document.createElement('hr'));
             
-            const messageLabel = document.createElement('h3'); // indicate message board
+            const postReplyContainer = document.querySelector('#postReply-container').cloneNode(true); // create reply option that switches between messages
+            show_messages(club.id, postReplyContainer); // show club messages
+        }
+    });
+}
+
+function show_messages(clubID, postReplyContainer) { // show the messages for a club page
+    fetch(`/messages/${clubID}/${sessionStorage.getItem('messagePage')}`) // get messages based on club and page
+    .then(response => response.json())
+    .then(messages => {
+        if (messages.length > 0 || sessionStorage.getItem('loggedIn') == 'true') {
+            const messageLabel = document.createElement('h2'); // indicate message board
             messageLabel.id = 'single-messageLabel';
             messageLabel.innerHTML = 'Message Board:';
             document.querySelector('#single-container').append(messageLabel);
@@ -364,43 +402,53 @@ function show_club(id) { // show a page for a club
                 
                 document.querySelector('#single-container').append(document.createElement('hr'));
             }
-            const postReplyContainer = document.querySelector('#postReply-container').cloneNode(true); // create reply option that switches between messages
-            show_messages(club.id, postReplyContainer); // show club messages
+
+            const messageContainer = document.createElement('div');
+            messageContainer.id = 'message-container';
+            messages.forEach(message => { // iterate through messages (maximum of 10)
+                const singleMessage = document.createElement('div'); // hold each message separately
+                singleMessage.classList.add('message-single');
+                messageContainer.append(singleMessage);
+
+                const messageInfo = document.createElement('div');
+                messageInfo.classList.add('message-info');
+                singleMessage.append(messageInfo);
+
+                const poster = document.createElement('div'); // show message poster info
+                poster.classList.add('message-poster');
+                poster.innerHTML = message.poster.username + " - " + message.poster.email;
+                messageInfo.append(poster);
+
+                const timestamp = document.createElement('div'); // show when message was posted
+                timestamp.classList.add('message-timestamp');
+                timestamp.innerHTML = message.timestamp;
+                messageInfo.append(timestamp);
+
+                messageInfo.append(document.createElement('br'));
+
+                const content = document.createElement('p'); // show message content
+                content.classList.add('message-content');
+                content.innerHTML = message.content;
+                singleMessage.append(content);
+
+                singleMessage.append(document.createElement('hr'));
+
+                show_replies(clubID, message, singleMessage, postReplyContainer); // show replies of message and other related items
+
+                document.querySelector('#single-container').append(messageContainer);
+            });
+            show_pagenav(clubID); // after all the messages, show navigation to switch around the messages
+        } else {
+            const loginLabelContainer = document.createElement('div');
+            loginLabelContainer.id = 'single-loginLabelContainer';
+            document.querySelector('#single-container').append(loginLabelContainer);
+
+            const loginLabel = document.createElement('a'); // indicate message board
+            loginLabel.id = 'single-loginLabel';
+            loginLabel.innerHTML = 'Log in to post messages below!';
+            loginLabel.href = 'login';
+            loginLabelContainer.append(loginLabel);
         }
-    });
-}
-
-function show_messages(clubID, postReplyContainer) { // show the messages for a club page
-    fetch(`/messages/${clubID}/${sessionStorage.getItem('messagePage')}`) // get messages based on club and page
-    .then(response => response.json())
-    .then(messages => {
-        const messageContainer = document.createElement('div');
-        messageContainer.id = 'message-container';
-        messages.forEach(message => { // iterate through messages (maximum of 10)
-            const singleMessage = document.createElement('div'); // hold each message separately
-            singleMessage.classList.add('message-single');
-            messageContainer.append(singleMessage);
-
-            const poster = document.createElement('div'); // show message poster info
-            poster.classList.add('message-poster');
-            poster.innerHTML = message.poster.username + " - " + message.poster.email;
-            singleMessage.append(poster);
-
-            const timestamp = document.createElement('div'); // show when message was posted
-            timestamp.classList.add('message-timestamp');
-            timestamp.innerHTML = message.timestamp;
-            singleMessage.append(timestamp);
-
-            const content = document.createElement('div'); // show message content
-            content.classList.add('message-content');
-            content.innerHTML = message.content;
-            singleMessage.append(content);
-
-            show_replies(clubID, message, singleMessage, postReplyContainer); // show replies of message and other related items
-
-            document.querySelector('#single-container').append(messageContainer);
-        });
-        show_pagenav(clubID); // after all the messages, show navigation to switch around the messages
     });
 }
 
@@ -410,8 +458,12 @@ function show_replies(clubID, message, singleMessage, postReplyContainer) { // s
 
     if (sessionStorage.getItem('loggedIn') == 'true') { // if the user is logged in
         // allow user to reply to a message
+        const replyButtonContainer = document.createElement('div');
+        replyButtonContainer.classList.add('reply-buttonContainer');
+        singleMessage.append(replyButtonContainer);
+
         const replyButton = document.createElement('button');
-        replyButton.classList.add('btn', 'btn-primary', 'reply-button');
+        replyButton.classList.add('btn', 'btn-primary', 'reply-button', 'btn-lg');
         replyButton.id = `reply-button-${message.id}`;
         replyButton.innerHTML = 'Reply';
         replyButton.onclick = () => { // show or remove replying option
@@ -435,11 +487,11 @@ function show_replies(clubID, message, singleMessage, postReplyContainer) { // s
                 };
             }
         };
-        singleMessage.append(replyButton);
+        replyButtonContainer.append(replyButton);
     }
 
     if (message.replies.length > 0) { // indicate message replies
-        const replyLabel = document.createElement('h5');
+        const replyLabel = document.createElement('h4');
         replyLabel.classList.add('reply-label');
         replyLabel.innerHTML = 'Replies:';
         replyContainer.append(replyLabel);
@@ -461,7 +513,7 @@ function show_replies(clubID, message, singleMessage, postReplyContainer) { // s
         timestamp.innerHTML = reply.timestamp;
         singleReply.append(timestamp);
 
-        const content = document.createElement('div'); // show reply content
+        const content = document.createElement('p'); // show reply content
         content.classList.add('reply-content');
         content.innerHTML = reply.content;
         singleReply.append(content);
@@ -483,7 +535,7 @@ function show_pagenav(clubID) { // show page navigation for message board
             pageNav.setAttribute('aria-label', 'Message Page Navigation');
 
             const pageUL = document.createElement('ul');
-            pageUL.classList.add('pagination');
+            pageUL.classList.add('pagination', 'pagination-lg');
             pageNav.append(pageUL);
 
             const prev = document.createElement('li');
@@ -491,7 +543,7 @@ function show_pagenav(clubID) { // show page navigation for message board
             pageUL.append(prev);
 
             const prevA = document.createElement('a');
-            prevA.classList.add('page-link');
+            prevA.classList.add('page-link', 'text-dark');
             prevA.href = '#';
             prevA.setAttribute('aria-label', 'Previous');
             prevA.onclick = () => { // store previous page number and reload club page if possible
@@ -516,7 +568,7 @@ function show_pagenav(clubID) { // show page navigation for message board
                 pageUL.append(single);
 
                 const singleA = document.createElement('a');
-                singleA.classList.add('page-link');
+                singleA.classList.add('page-link', 'text-dark');
                 singleA.href = '#';
                 singleA.innerHTML = `${i}`;
                 singleA.onclick = () => { // store selected page number and reload club page
@@ -532,7 +584,7 @@ function show_pagenav(clubID) { // show page navigation for message board
             pageUL.append(next);
 
             const nextA = document.createElement('a');
-            nextA.classList.add('page-link');
+            nextA.classList.add('page-link', 'text-dark');
             nextA.href = '#';
             nextA.setAttribute('aria-label', 'Next');
             nextA.onclick = () => { // store next page number and reload club page if possible
