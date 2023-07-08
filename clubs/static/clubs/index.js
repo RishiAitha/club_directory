@@ -125,7 +125,7 @@ function show_previews(clubs) { // show a preview of a club
         const previewContainer = document.createElement('div'); // hold all info here
         previewContainer.classList.add('preview-container');
 
-        const title = document.createElement('div'); // display title of club
+        const title = document.createElement('h4'); // display title of club
         title.innerHTML = club.title;
         title.classList.add('preview-title');
         title.addEventListener('click', function() { // show club page when title is clicked

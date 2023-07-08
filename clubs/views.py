@@ -61,9 +61,6 @@ def register(request): # registers new account based on given info
     else:
         return render(request, "clubs/register.html")
 
-def terms(request): # displays terms, conditions, and other info of website
-    return render(request, "clubs/terms.html")
-
 def approved_clubs(request): # returns info of all approved clubs in alphabetical order
     if request.method == "GET":
         clubs = Club.objects.filter(isApproved=True).order_by("title").all()
