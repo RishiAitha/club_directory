@@ -121,7 +121,6 @@ function show_pending() { // show all pending clubs
 
 function show_previews(clubs) { // show a preview of a club
     clubs.forEach(club => { // iterate through each club
-        console.log(club);
         // add info and options for current club
         const previewContainer = document.createElement('div'); // hold all info here
         previewContainer.classList.add('preview-container');
@@ -626,7 +625,6 @@ function submit_club() { // send request to add club
         })
         .then(response => response.json())
         .then(result => {
-            console.log(result);
             // remove error and hide creation page
             document.querySelector('#create-errorMessage').innerHTML = '';
             document.querySelector('#create-container').style.display = 'none';
@@ -649,7 +647,6 @@ function post_message(clubID) { // send request to post message
         })
         .then(response => response.json())
         .then(result => {
-            console.log(result);
             // remove error and reset post fields
             document.querySelector('#post-errorMessage').innerHTML = '';
             document.querySelector('#post-content').value = '';
@@ -673,7 +670,6 @@ function post_reply(clubID, messageID) { // send request to post reply
         })
         .then(response => response.json())
         .then(result => {
-            console.log(result);
             // remove error, reset reply fields, and hide reply option
             document.querySelector('#postReply-errorMessage').innerHTML = '';
             document.querySelector('#postReply-content').value = '';
@@ -703,7 +699,6 @@ function edit_club() { // send request to edit club content
         })
         .then(response => response.json())
         .then(result => {
-            console.log(result);
             // remove error, hide editing page, and change editing status
             document.querySelector('#edit-errorMessage').innerHTML = '';
             document.querySelector('#edit-container').style.display = 'none';
@@ -727,7 +722,6 @@ function add_editor() { // send request to add an authorized club editor
         })
         .then(response => response.json())
         .then(result => {
-            console.log(result);
             // get email that user provided
             let email = document.querySelector('#editors-add-input').value;
             let invalidEmail = result.error === `User with email ${email} does not exist`; // check if an invalid email was given
@@ -756,7 +750,6 @@ function remove_editor() { // send request to remove an authorized club editor
     })
     .then(response => response.json())
     .then(result => {
-        console.log(result);
         // guaranteed to send a valid editor due to the list of editor options to remove coming from the server itself
         // reset editing fields and change editing status
         document.querySelector('#editors-errorMessage').innerHTML = '';
@@ -776,7 +769,6 @@ function toggle_interest(interested, clubID) { // toggle user's interest in a cl
     })
     .then(response => response.json())
     .then(result => {
-        console.log(result);
         document.querySelector('#single-interestDisplay').innerHTML = 'Interested Users Count: ' + result.interestCount; // update interest count display
         if (interested) {
             // allow user to remove interest status
@@ -804,7 +796,6 @@ function approve_club(clubID) { // set a club as approved
     })
     .then(response => response.json())
     .then(result => {
-        console.log(result);
         show_approved(); // show approved clubs
     })
 }
@@ -819,7 +810,6 @@ function disapprove_club(clubID) { // remove a club's approval
     })
     .then(response => response.json())
     .then(result => {
-        console.log(result);
         show_pending(); // show pending clubs
     })
 }

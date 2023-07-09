@@ -1,3 +1,4 @@
+/* The CSS is a complete mess, but it works and allows mobile compatibility */
 body {
     min-height: 100vh;
     display: flex;
