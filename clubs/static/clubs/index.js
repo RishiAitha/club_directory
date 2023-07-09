@@ -394,7 +394,7 @@ function show_messages(clubID, postReplyContainer) { // show the messages for a 
                 postContainer.style.display = 'block';
                 document.querySelector('#single-container').appendChild(postContainer);
                 document.querySelector('#post-form').onsubmit = () => { // post message if post form is submitted
-                    post_message(club.id);
+                    post_message(clubID);
                     return false;
                 }
                 

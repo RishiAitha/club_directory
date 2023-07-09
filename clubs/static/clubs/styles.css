@@ -66,7 +66,7 @@ div {
 }
 
 h1 {
-    font-size: 4rem;
+    font-size: 3.9rem;
 }
 
 h2 {
@@ -74,7 +74,7 @@ h2 {
 }
 
 h3 {
-    font-size: 2.3rem;
+    font-size: 2.2rem;
 }
 
 h4 {
@@ -83,6 +83,88 @@ h4 {
 
 p {
     font-size: 1.4rem;
+}
+
+@media screen and (max-width:450px) {
+    div {
+        font-size: 1.1rem;
+    }
+
+    h1 {
+        font-size: 3rem;
+    }
+    
+    h2 {
+        font-size: 2.4rem;
+    }
+    
+    h3 {
+        font-size: 1.7rem;
+    }
+    
+    h4 {
+        font-size: 1.5rem;
+    }
+    
+    p {
+        font-size: 1rem;
+    }
+
+    .nav-link {
+        font-size: 1.5rem;
+    }
+
+    .navbar-brand {
+        font-size: 1.9rem;
+    }
+
+    #login-container > form > div > input, #register-container > form > div > input {
+        font-size: 18px !important;
+    }
+
+    #login-container > form > input, #register-container > form > input {
+        font-size: 1rem !important;
+    }
+
+    #login-container, #register-container {
+        font-size: 1rem !important;
+    }
+
+    #single-loginLabel {
+        font-size: 1.2rem !important;
+    }
+    
+    #edit-container > form > div > input, #edit-container > form > div > textarea, #create-container > form > div > input, #create-container > form > div > textarea {
+        font-size: 18px !important;
+    }
+    
+    #edit-container > form > div > button, #edit-container > form > input, #create-container > form > div > button, #create-container > form > input {
+        font-size: 1rem !important;
+    }
+    
+    #edit-image-inputContainer, #create-image-inputContainer {
+        font-size: 18px !important;
+    }
+
+    #edit-image-none {
+        transform: translate(0px, -1.25px) !important;
+    }
+    
+    #edit-image-label {
+        font-size: 18px !important;
+    }
+
+    #editors-container > form > div > input, #editors-container > form > div > select {
+        font-size: 18px !important;
+    }
+    
+    #editors-container > form > input {
+        font-size: 1rem !important;
+    }
+
+    .pagination-lg .page-link {
+        font-size: 18px !important;
+    }
 }
 
 .btn {
@@ -310,7 +392,6 @@ footer > p {
 }
 
 .message-info, .reply-poster, .reply-timestamp {
-    font-size: 1.5rem;
     font-weight: 600;
 }
 
