@@ -286,6 +286,17 @@ function show_club(id) { // show a page for a club
         title.innerHTML = club.title;
         document.querySelector('#single-container').append(title);
 
+        if (club.image) {
+            const imageContainer = document.createElement('div');
+            imageContainer.id = 'single-imageContainer';
+            document.querySelector('#single-container').append(imageContainer);
+
+            const image = document.createElement('img'); // display club image if possible
+            image.id = 'single-image';
+            image.src = club.image;
+            imageContainer.append(image);
+        }
+
         const infoContainer = document.createElement('div');
         infoContainer.id = 'single-infoContainer';
         document.querySelector('#single-container').append(infoContainer);
@@ -318,19 +329,6 @@ function show_club(id) { // show a page for a club
             announcement.id = 'single-announcement';
             announcement.innerHTML = club.announcement;
             announcementContainer.append(announcement);
-        }
-
-        if (club.image) {
-            const imageContainer = document.createElement('div');
-            imageContainer.id = 'single-imageContainer';
-            document.querySelector('#single-container').append(imageContainer);
-
-            imageContainer.append(document.createElement('br'));
-
-            const image = document.createElement('img'); // display club image if possible
-            image.id = 'single-image';
-            image.src = club.image;
-            imageContainer.append(image);
         }
         
         // if clubs being displayed are not pending clubs, allow general interaction

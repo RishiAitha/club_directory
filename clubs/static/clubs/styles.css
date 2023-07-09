@@ -11,6 +11,7 @@ body {
 
 .navbar {
     font-size: 200%;
+    text-align: center;
 }
 
 .navbar-brand {
@@ -20,6 +21,21 @@ body {
 
 .navbar-nav > li {
     padding: 25px 10px 25px 10px;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.navbar-toggler {
+    margin-right: 0.5rem;
+}
+
+.navbar-toggler-icon {
+    width: 2.9rem;
+    height: 2.7rem;
 }
 
 .preview-container {
@@ -67,6 +83,10 @@ h4 {
 
 p {
     font-size: 1.4rem;
+}
+
+.btn {
+    border-radius: 1.2rem;
 }
 
 #login-container > form > div > input, #register-container > form > div > input {
@@ -156,6 +176,7 @@ p {
 }
 
 #create-image-preview, #edit-image-preview, .preview-image {
+    height: 20vmax;
     max-width: 60%;
     max-height: 500px;
     margin: auto;
@@ -166,14 +187,14 @@ p {
 }
 
 #single-image {
+    height: 30vmax;
     max-width: 80%;
     max-height: 700px;
-    margin: auto;
+    margin-top: 30px;
+    margin-bottom: 30px;
 }
 
 .preview-editContentButton, .preview-editEditorsButton, .preview-approveButton, .preview-disapproveButton {
-    max-width: 75%;
-    max-height: 50px;
     text-align: center;
     overflow: auto;
     white-space: nowrap;
@@ -209,6 +230,7 @@ footer > p {
 
 #single-title {
     text-align: center;
+    margin-bottom: 0px;
 }
 
 #single-infoContainer {
