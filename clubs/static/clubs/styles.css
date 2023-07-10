@@ -1,7 +1,7 @@
 /* The CSS is a complete mess, but it works and allows mobile compatibility */
 :root {
     --blue: rgb(6, 6, 80);
-    --yellow: rgb(255, 208, 0);
+    --yellow: rgb(255, 196, 0);
     --lightgray: rgb(222, 228, 241);
     --darkgray: rgb(57, 62, 66);
 }
@@ -81,8 +81,8 @@ h4, h5, h6, p, label > * {
 }
 
 .preview-title:hover {
-    transition: color 0.3s;
-    color: var(--yellow);
+    transition: color 0.2s !important;
+    color: var(--yellow) !important;
 }
 
 .navbar {
