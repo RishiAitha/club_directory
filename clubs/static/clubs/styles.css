@@ -1,4 +1,11 @@
 /* The CSS is a complete mess, but it works and allows mobile compatibility */
+:root {
+    --blue: rgb(6, 6, 80);
+    --yellow: rgb(255, 208, 0);
+    --lightgray: rgb(222, 228, 241);
+    --darkgray: rgb(57, 62, 66);
+}
+
 body {
     min-height: 100vh;
     display: flex;
@@ -8,6 +15,7 @@ body {
 .body {
     font-family: 'Montserrat', sans-serif;
     padding: 10px;
+    background-color: white;
 }
 
 .navbar {
@@ -32,6 +40,7 @@ body {
 
 .navbar-toggler {
     margin-right: 0.5rem;
+    border-color: var(--darkgray) !important;
 }
 
 .navbar-toggler-icon {
@@ -54,12 +63,64 @@ body {
     text-align: center;
 }
 
+div, h1, h2, h3, .text-dark {
+    color: var(--blue) !important;
+}
+
+h4, h5, h6, p, label > * {
+    color: var(--darkgray) !important;
+}
+
+.form-control {
+    color: var(--blue);
+    background-color: var(--lightgray);
+}
+
 .preview-title, .preview-image {
     cursor: pointer;
 }
 
 .preview-title:hover {
-    color: deepskyblue;
+    transition: color 0.3s;
+    color: var(--yellow);
+}
+
+.navbar {
+    background-color: var(--blue);
+}
+
+.nav-link, .navbar-brand {
+    color: white !important;
+}
+
+.nav-link:hover {
+    transition: color 0.3s !important;
+    color: var(--yellow) !important;
+}
+
+.navbar-brand:hover {
+    color: white;
+}
+
+strong {
+    color: rgb(128, 128, 128) !important;
+}
+
+strong:hover {
+    color: rgb(128, 128, 128) !important;
+    cursor: default;
+}
+
+.btn-primary {
+    background-color: var(--blue);
+    border-color: var(--blue);
+    color: var(--lightgray);
+}
+
+.btn-primary:hover {
+    background-color: var(--lightgray);
+    border-color: var(--lightgray);
+    color: var(--blue);
 }
 
 div {
@@ -216,7 +277,7 @@ p {
 }
 
 #edit-image-none {
-    transform: translate(0px, -2.5px);
+    transform: translate(0px, -2.6px);
 }
 
 #edit-image-label {
