@@ -50,7 +50,7 @@ body {
 
 .preview-container {
     border-style: solid;
-    border-color: black;
+    border-color: var(--darkgray);
     border-width: 3px;
     border-radius: 10px;
     margin: 10px auto 10px auto;
@@ -355,14 +355,14 @@ p {
 
 footer {
     width: 100%;
-    background-color: lightgray;
+    background-color: var(--lightgray);
     padding-top: 20px;
     padding-bottom: 20px;
     height: fit-content;
     text-align: left;
     border-top: solid;
-    border-width: 2px;
-    border-color: lightslategray;
+    border-width: 3px;
+    border-color: var(--darkgray);
     margin-top: auto;
     font-family: 'Montserrat', sans-serif;
     font-size: x-large;
@@ -379,7 +379,7 @@ footer > p {
 
 #single-infoContainer {
     border-style: solid;
-    border-color: black;
+    border-color: var(--darkgray);
     border-radius: 10px;
     height: fit-content;
     width: 90%;
@@ -447,7 +447,7 @@ footer > p {
 
 .message-single {
     border: solid;
-    border-color: lightslategray;
+    border-color: var(--darkgray);
     border-radius: 10px;
     padding: 5px;
     margin-bottom: 5px;
@@ -469,7 +469,7 @@ footer > p {
 
 .reply-single {
     border-style: solid;
-    border-color: lightgray;
+    border-color: var(--lightgray);
     border-radius: 5px;
     border-width: 2px;
     margin-bottom: 3px;
