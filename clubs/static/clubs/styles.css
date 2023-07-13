@@ -1,66 +1,9 @@
-/* The CSS is a complete mess, but it works and allows mobile compatibility */
+/* ----- Color Setup ----- */
 :root {
     --blue: rgb(6, 6, 80);
     --yellow: rgb(255, 196, 0);
     --lightgray: rgb(222, 228, 241);
     --darkgray: rgb(57, 62, 66);
-}
-
-body {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
-
-.body {
-    font-family: 'Montserrat', sans-serif;
-    padding: 10px;
-    background-color: white;
-}
-
-.navbar {
-    font-size: 200%;
-    text-align: center;
-}
-
-.navbar-brand {
-    font-size: 130%;
-    padding-left: 20px;
-}
-
-.navbar-nav > li {
-    padding: 25px 10px 25px 10px;
-}
-
-.nav-item {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.navbar-toggler {
-    margin-right: 0.5rem;
-    border-color: var(--darkgray) !important;
-}
-
-.navbar-toggler-icon {
-    width: 2.9rem;
-    height: 2.7rem;
-}
-
-.preview-container {
-    border-style: solid;
-    border-color: var(--darkgray);
-    border-width: 3px;
-    border-radius: 10px;
-    margin: 10px auto 10px auto;
-    width: 70%;
-    min-width: fit-content;
-    padding: 0px 5px 3px 5px;
-    flex-direction: column;
-    display: flex;
-    align-items: center;
-    text-align: center;
 }
 
 div, h1, h2, h3, .text-dark {
@@ -76,53 +19,20 @@ h4, h5, h6, p, label > * {
     background-color: var(--lightgray);
 }
 
-.preview-title, .preview-image {
-    cursor: pointer;
+/* ----- Body Setup ----- */
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
-.preview-title:hover {
-    transition: color 0.2s !important;
-    color: var(--yellow) !important;
+.body {
+    font-family: 'Montserrat', sans-serif;
+    padding: 10px;
+    background-color: white;
 }
 
-.navbar {
-    background-color: var(--blue);
-}
-
-.nav-link, .navbar-brand {
-    color: white !important;
-}
-
-.nav-link:hover {
-    transition: color 0.3s !important;
-    color: var(--yellow) !important;
-}
-
-.navbar-brand:hover {
-    color: white;
-}
-
-strong {
-    color: rgb(128, 128, 128) !important;
-}
-
-strong:hover {
-    color: rgb(128, 128, 128) !important;
-    cursor: default;
-}
-
-.btn-primary {
-    background-color: var(--blue);
-    border-color: var(--blue);
-    color: var(--lightgray);
-}
-
-.btn-primary:hover {
-    background-color: var(--lightgray);
-    border-color: var(--lightgray);
-    color: var(--blue);
-}
-
+/* ----- Font Size ----- */
 div {
     overflow-wrap: break-word;
 }
@@ -171,7 +81,56 @@ p {
     p {
         font-size: 1rem;
     }
+}
 
+/* ----- Navbar ----- */
+.navbar {
+    font-size: 200%;
+    text-align: center;
+    background-color: var(--blue);
+}
+
+.navbar-brand {
+    font-size: 130%;
+    padding-left: 20px;
+    color: white !important;
+}
+
+.nav-item {
+    padding: 25px 10px 25px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.navbar-toggler {
+    margin-right: 0.5rem;
+    border-color: var(--darkgray) !important;
+}
+
+.navbar-toggler-icon {
+    width: 2.9rem;
+    height: 2.7rem;
+}
+
+.nav-link {
+    color: white !important;
+}
+
+.nav-link:hover {
+    transition: color 0.3s !important;
+    color: var(--yellow) !important;
+}
+
+.nav-link.disabled {
+    color: rgb(128, 128, 128) !important;
+}
+
+.nav-link.disabled:hover {
+    cursor: default;
+}
+
+@media screen and (max-width:450px) {
     .nav-link {
         font-size: 1.5rem;
     }
@@ -179,138 +138,35 @@ p {
     .navbar-brand {
         font-size: 1.9rem;
     }
-
-    #login-container > form > div > input, #register-container > form > div > input {
-        font-size: 18px !important;
-    }
-
-    #login-container > form > input, #register-container > form > input {
-        font-size: 1rem !important;
-    }
-
-    #login-container, #register-container {
-        font-size: 1rem !important;
-    }
-
-    #single-loginLabel {
-        font-size: 1.2rem !important;
-    }
-    
-    #edit-container > form > div > input, #edit-container > form > div > textarea, #create-container > form > div > input, #create-container > form > div > textarea {
-        font-size: 18px !important;
-    }
-    
-    #edit-container > form > div > button, #edit-container > form > input, #create-container > form > div > button, #create-container > form > input {
-        font-size: 1rem !important;
-    }
-    
-    #edit-image-inputContainer, #create-image-inputContainer {
-        font-size: 18px !important;
-    }
-
-    #edit-image-none {
-        transform: translate(0px, -1.25px) !important;
-    }
-    
-    #edit-image-label {
-        font-size: 18px !important;
-    }
-
-    #editors-container > form > div > input, #editors-container > form > div > select {
-        font-size: 18px !important;
-    }
-    
-    #editors-container > form > input {
-        font-size: 1rem !important;
-    }
-
-    .pagination-lg .page-link {
-        font-size: 18px !important;
-    }
 }
 
-.btn {
+/* ----- Buttons ----- */
+.btn-primary {
+    background-color: var(--blue);
+    border-color: var(--blue);
+    color: var(--lightgray);
     border-radius: 1.2rem;
 }
 
-#login-container > form > div > input, #register-container > form > div > input {
-    font-size: 24px;
-    width: 70%;
-    margin: auto;
+.btn-primary:hover {
+    background-color: var(--lightgray);
+    border-color: var(--lightgray);
+    color: var(--blue);
 }
 
-#login-container > form > input, #register-container > form > input {
-    font-size: 1.6rem;
-}
-
-#login-container, #register-container {
-    font-size: 1.6rem;
-}
-
-#editors-container > form > div > input, #editors-container > form > div > select {
-    font-size: 24px;
-    width: 80%;
-    margin: auto;
-    height: fit-content;
-}
-
-#editors-container > form > input {
-    font-size: 1.6rem;
-}
-
-#edit-container > form > div > input, #edit-container > form > div > textarea, #create-container > form > div > input, #create-container > form > div > textarea {
-    font-size: 24px;
-    width: 80%;
-    margin: auto;
-    height: fit-content;
-}
-
-#edit-container > form > div > button, #edit-container > form > input, #create-container > form > div > button, #create-container > form > input {
-    font-size: 1.6rem;
+/* ----- Club Previews ----- */
+.preview-container {
+    border-style: solid;
+    border-color: var(--darkgray);
+    border-width: 3px;
+    border-radius: 10px;
     margin: 10px auto 10px auto;
-}
-
-#edit-image-inputContainer, #create-image-inputContainer {
-    text-align: center;
-    font-size: 24px;
-    margin-top: 10px;
-}
-
-#edit-image-none {
-    transform: translate(0px, -2.6px);
-}
-
-#edit-image-label {
-    font-size: 24px;
-}
-
-#post-content, #postReply-content {
-    width: 80%;
-    margin: auto;
-}
-
-#single-loginLabelContainer {
-    margin: auto;
-    text-align: center;
-}
-
-#single-loginLabel {
-    font-size: 2.2rem;
-    cursor: pointer;
-}
-
-#pending-adminTitle, #pending-adminInfo {
-    margin: auto;
-    max-width: 80%;
-    text-align: center;
-}
-
-#single-container {
-    margin: 5px;
-}
-
-#create-container, #login-container, #register-container, #edit-container, #editors-container {
-    margin: 5px;
+    width: 70%;
+    min-width: fit-content;
+    padding: 0px 5px 3px 5px;
+    flex-direction: column;
+    display: flex;
+    align-items: center;
     text-align: center;
 }
 
@@ -319,11 +175,51 @@ p {
     margin-bottom: 2.5px;
 }
 
-#create-image-preview, #edit-image-preview, .preview-image {
+.preview-title, .preview-image {
+    cursor: pointer;
+}
+
+.preview-title:hover {
+    transition: color 0.2s !important;
+    color: var(--yellow) !important;
+}
+
+.preview-image {
     height: 20vmax;
     max-width: 60%;
     max-height: 500px;
     margin: auto;
+}
+
+.preview-editContentButton, .preview-editEditorsButton, .preview-approveButton, .preview-disapproveButton {
+    text-align: center;
+    overflow: auto;
+    white-space: nowrap;
+    display: inline-block;
+    text-overflow: ellipsis;
+    font-size: 1.5vmax;
+    height: fit-content;
+}
+
+/* ----- Admin Page ----- */
+#pending-adminTitle {
+    text-align: center;
+}
+
+#pending-adminTitle, #pending-adminInfo {
+    margin: auto;
+    max-width: 80%;
+    text-align: center;
+}
+
+/* ----- Single Club Page ----- */
+#single-container {
+    margin: 5px;
+}
+
+#single-title {
+    text-align: center;
+    margin-bottom: 0px;
 }
 
 #single-imageContainer {
@@ -338,43 +234,8 @@ p {
     margin-bottom: 30px;
 }
 
-.preview-editContentButton, .preview-editEditorsButton, .preview-approveButton, .preview-disapproveButton {
+#single-descriptionLabel, #single-announcementLabel, #single-interestContainer {
     text-align: center;
-    overflow: auto;
-    white-space: nowrap;
-    display: inline-block;
-    text-overflow: ellipsis;
-    font-size: 1.5vmax;
-    height: fit-content;
-}
-
-#create-image-remove, #edit-image-remove {
-    margin-top: 5px;
-    margin-bottom: 5px;
-}
-
-footer {
-    width: 100%;
-    background-color: var(--lightgray);
-    padding-top: 20px;
-    padding-bottom: 20px;
-    height: fit-content;
-    text-align: left;
-    border-top: solid;
-    border-width: 3px;
-    border-color: var(--darkgray);
-    margin-top: auto;
-    font-family: 'Montserrat', sans-serif;
-    font-size: x-large;
-}
-
-footer > p {
-    margin: auto 10px auto;
-}
-
-#single-title {
-    text-align: center;
-    margin-bottom: 0px;
 }
 
 #single-infoContainer {
@@ -426,18 +287,36 @@ footer > p {
         border-left-width: 1px;
         flex-grow: 1;
     }
-    
-    .message-poster {
-        float: left;
-    }
+}
 
-    .message-timestamp {
-        float: right;
+#single-loginLabelContainer {
+    margin: auto;
+    text-align: center;
+}
+
+#single-loginLabel {
+    font-size: 2.2rem;
+    cursor: pointer;
+}
+
+@media screen and (max-width:450px) {
+    #single-loginLabel {
+        font-size: 1.2rem !important;
     }
 }
 
-#single-descriptionLabel, #single-announcementLabel, #single-interestContainer, #single-messageLabel {
+/* ----- Message Board ----- */
+#single-messageLabel {
     text-align: center;
+}
+
+#post-container {
+    text-align: center;
+}
+
+#post-content {
+    width: 80%;
+    margin: auto;
 }
 
 #message-container {
@@ -453,8 +332,18 @@ footer > p {
     margin-bottom: 5px;
 }
 
-.message-info, .reply-poster, .reply-timestamp {
+.message-info {
     font-weight: 600;
+}
+
+@media screen and (min-width: 1100px) {
+    .message-poster {
+        float: left;
+    }
+
+    .message-timestamp {
+        float: right;
+    }
 }
 
 .reply-button {
@@ -467,6 +356,15 @@ footer > p {
     margin-bottom: 3px;
 }
 
+#postReply-container {
+    text-align: center;
+}
+
+#postReply-content {
+    width: 80%;
+    margin: auto;
+}
+
 .reply-single {
     border-style: solid;
     border-color: var(--lightgray);
@@ -476,16 +374,8 @@ footer > p {
     padding: 5px;
 }
 
-#post-container, #postReply-container {
-    text-align: center;
-}
-
-#create-image-label, #edit-image-label {
-    margin-bottom: 5px;
-}
-
-#pending-adminTitle {
-    text-align: center;
+.reply-poster, .reply-timestamp {
+    font-weight: 600;
 }
 
 .pagination {
@@ -495,4 +385,173 @@ footer > p {
 
 .pagination-lg .page-link {
     font-size: 28px;
+}
+
+@media screen and (max-width:450px) {
+    .pagination-lg .page-link {
+        font-size: 18px !important;
+    }
+}
+
+/* ----- Login and Registration Pages ----- */
+#login-container, #register-container {
+    font-size: 1.6rem;
+    margin: 5px;
+    text-align: center;
+}
+
+#login-container > form > div > input, #register-container > form > div > input {
+    font-size: 24px;
+    width: 70%;
+    margin: auto;
+}
+
+#login-container > form > input, #register-container > form > input {
+    font-size: 1.6rem;
+}
+
+@media screen and (max-width:450px) {
+    #login-container, #register-container {
+        font-size: 1rem !important;
+    }
+
+    #login-container > form > div > input, #register-container > form > div > input {
+        font-size: 18px !important;
+    }
+
+    #login-container > form > input, #register-container > form > input {
+        font-size: 1rem !important;
+    }   
+}
+
+/* ----- Creation and Editing Pages ----- */
+#create-container, #edit-container {
+    margin: 5px;
+    text-align: center;
+}
+
+#create-container > form > div > input, #edit-container > form > div > input {
+    font-size: 24px;
+    width: 80%;
+    margin: auto;
+    height: fit-content;
+}
+
+#create-container > form > div > textarea, #edit-container > form > div > textarea {
+    font-size: 24px;
+    width: 80%;
+    margin: auto;
+    height: fit-content;
+}
+
+#create-image-info, #edit-image-info {
+    margin-bottom: 5px;
+}
+
+#create-image-inputContainer, #edit-image-inputContainer {
+    text-align: center;
+    font-size: 24px;
+    margin-top: 10px;
+}
+
+#create-image-preview, #edit-image-preview {
+    height: 20vmax;
+    max-width: 60%;
+    max-height: 500px;
+    margin: auto;
+}
+
+#create-image-remove, #edit-image-remove {
+    font-size: 1.6rem;
+    margin: 10px auto 10px auto;
+}
+
+#edit-image-none {
+    transform: translate(0px, -2.6px);
+}
+
+#edit-image-label {
+    font-size: 24px;
+}
+
+#create-container > form > input, #edit-container > form > input {
+    font-size: 1.6rem;
+    margin: 10px auto 10px auto;
+}
+
+@media screen and (max-width:450px) {
+    #create-container > form > div > input, #edit-container > form > div > input {
+        font-size: 18px !important;
+    }
+
+    #create-container > form > div > textarea, #edit-container > form > div > textarea {
+        font-size: 18px !important;
+    }
+
+    #edit-image-inputContainer, #create-image-inputContainer {
+        font-size: 18px !important;
+    }
+
+    #create-image-remove, #edit-image-remove {
+        font-size: 1rem !important;
+    }
+
+    #edit-image-none {
+        transform: translate(0px, -1.25px) !important;
+    }
+
+    #edit-image-label {
+        font-size: 18px !important;
+    }
+    
+    #create-container > form > input, #edit-container > form > input {
+        font-size: 1rem !important;
+    }
+}
+
+/* ----- Change Club Editors Page ----- */
+#editors-container {
+    margin: 5px;
+    text-align: center;
+}
+
+#editors-container > form > div > input, #editors-container > form > div > select {
+    font-size: 24px;
+    width: 80%;
+    margin: auto;
+    height: fit-content;
+}
+
+#editors-container > form > input {
+    font-size: 1.6rem;
+}
+
+@media screen and (max-width:450px) {
+    #editors-container > form > div > input, #editors-container > form > div > select {
+        font-size: 18px !important;
+    }
+    
+    #editors-container > form > input {
+        font-size: 1rem !important;
+    }
+}
+
+/* ----- Footer ----- */
+footer {
+    width: 100%;
+    background-color: var(--lightgray);
+    padding-top: 20px;
+    padding-bottom: 20px;
+    height: fit-content;
+    text-align: left;
+    border-top: solid;
+    border-width: 3px;
+    border-color: var(--darkgray);
+    margin-top: auto;
+    font-family: 'Montserrat', sans-serif;
+    font-size: x-large;
+}
+
+footer > p {
+    margin: auto 10px auto;
 }
