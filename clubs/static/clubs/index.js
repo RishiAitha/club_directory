@@ -650,6 +650,7 @@ function post_message(clubID) { // send request to post message
             // remove error and reset post fields
             document.querySelector('#post-errorMessage').innerHTML = '';
             document.querySelector('#post-content').value = '';
+            sessionStorage.setItem('messagePage', 1);
             show_club(clubID); // show club that message was posted to
         })
     }
@@ -674,6 +675,7 @@ function post_reply(clubID, messageID) { // send request to post reply
             document.querySelector('#postReply-errorMessage').innerHTML = '';
             document.querySelector('#postReply-content').value = '';
             document.querySelector('#postReply-container').style.display = 'none';
+            sessionStorage.setItem('replying', -1);
             show_club(clubID); // show club that reply was posted to
         })
     }
