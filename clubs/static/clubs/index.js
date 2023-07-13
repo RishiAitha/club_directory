@@ -705,7 +705,11 @@ function edit_club() { // send request to edit club content
             document.querySelector('#edit-errorMessage').innerHTML = '';
             document.querySelector('#edit-container').style.display = 'none';
             sessionStorage.setItem('editing', -1);
-            show_approved(); // show approved clubs
+            if (sessionStorage.getItem('clubType') === 'approved') {
+                show_approved();
+            } else {
+                show_pending();
+            }
         });
     }
     return false;
@@ -736,7 +740,11 @@ function add_editor() { // send request to add an authorized club editor
                 document.querySelector('#editors-add-input').value = '';
                 document.querySelector('#editors-remove-input').innerHTML = '';
                 sessionStorage.setItem('editing', -1);
-                show_approved(); // show approved clubs
+                if (sessionStorage.getItem('clubType') === 'approved') {
+                    show_approved();
+                } else {
+                    show_pending();
+                }
             }
         })
     }
@@ -758,7 +766,11 @@ function remove_editor() { // send request to remove an authorized club editor
         document.querySelector('#editors-add-input').value = '';
         document.querySelector('#editors-remove-input').innerHTML = '';
         sessionStorage.setItem('editing', -1);
-        show_approved(); // show approved clubs
+        if (sessionStorage.getItem('clubType') === 'approved') {
+            show_approved();
+        } else {
+            show_pending();
+        }
     })
 }
 
