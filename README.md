@@ -1,5 +1,4 @@
 # Club Directory - CS50W Capstone
----
 
 ## Project Overview
 This website is a submission for the CS50W Capstone Project, and is made by Rishi Aitha. The purpose of the site is to provide easy organization and access for information on clubs and activites at a school. I plan on deploying the site and offering it for my own school to use for the students.
@@ -8,7 +7,6 @@ The idea arose because of the confusion that myself and many other students face
 
 The administration features and security would allow a school to easily manage the site without worry of malicious attacks and inaccurate information. The users can easily understand how to navigate the site and there are several useful features such as the message board that help students gain valuable insight into their interests and questions.
 
----
 ## Distinctiveness and Complexity
 ### Distinctiveness from previous projects:
 This project is significantly distinct from previous work in the CS50W course while still using the ideas and strategies covered in the lectures and projects (other ideas and strategies used are cited below). The aspects of messaging are used and implemented differently compared to previous email and network projects and more features have been added compared to before (such as replies). The focus of the site is managing information rather than communication, so it is very different compared to the communication sites made previously.
@@ -24,7 +22,6 @@ The largest point of complexity and difficulty for me when creating the project 
 
 Along with the images (which were stored in a Docker volume), the structure of the website during development created more complexity. The website is run on a Docker container using a PostgresSQL database. While these concepts were introduced in the lectures, implementing them onto a robust Django project with features like image upload and storage was a challenge and made the project more complex while making it more scalable, easier to share, and easier to deploy.
 
----
 ## File Overview
  - club_directory folder: manages Django project and contains settings and other files
  - settings.py: modified to work for images and static files
@@ -43,12 +40,10 @@ Along with the images (which were stored in a Docker volume), the structure of t
  - models.py: outlines the structure that website data is stored
  - urls.py: defines all the clubs application urls (API routes and account management routes)
  - views.py: defines all API routes and account management routes to store and change the website data using JavaScript fetch calls
----
 ## How to Set Up and Run Website
 ### Requirements:
 ### Process:
 
----
 ## Citations
 ### Strategies:
 FormData for managing image files:
