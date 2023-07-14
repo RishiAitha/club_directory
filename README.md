@@ -47,44 +47,64 @@ Along with the images (which were stored in a Docker volume), the structure of t
 ## Citations
 ### Strategies:
 FormData for managing image files:
+
 https://developer.mozilla.org/en-US/docs/Web/API/FormData
+
 https://www.freecodecamp.org/news/formdata-explained/
+
 https://developer.mozilla.org/en-US/docs/Web/API/FormData/Using_FormData_Objects
+
 https://docs.djangoproject.com/en/4.2/ref/request-response/
 
 Docker and Postgres setup:
+
 https://learndjango.com/tutorials/django-docker-and-postgresql-tutorial
 
 Image Storage:
+
 https://docs.djangoproject.com/en/4.2/topics/files/
+
 https://www.section.io/engineering-education/an-extensive-guide-on-handling-images-in-django/
+
 https://medium.com/@seanoughton/docker-data-volumes-32d83b334d
+
 https://docs.docker.com/storage/volumes/
 
 API info:
+
 https://www.geeksforgeeks.org/difference-between-put-and-patch-request/amp/
 
 Comparisons with .some():
+
 https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/some
 
 Transform Translate CSS:
+
 https://developer.mozilla.org/en-US/docs/Web/CSS/transform-function/translate
 
 ### Tools and Style:
 Git:
+
 https://github.com/
 
 Bootstrap:
+
 https://getbootstrap.com/docs/3.3/getting-started/
 
 Navbar:
+
 https://getbootstrap.com/docs/4.0/components/navbar/
 
 Font:
+
 https://fonts.google.com/share?selection.family=Montserrat:wght@500
 
 ### Images (Public Domain):
+
 https://flic.kr/p/2o3eXpC
+
 https://flic.kr/p/9xSrLG
+
 https://flic.kr/p/7KjuVQ
+
 https://flic.kr/p/269qffo
