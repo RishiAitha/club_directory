@@ -18,6 +18,8 @@ This project is significantly more complex than any other CS50W projects that I 
 
 The administration feature of approving clubs before adding them is a new system that has not been implemented in previous projects. The message board contains replies and improved display/organization that is even more useful and robust compared to the network and email projects, and it is only one part of one section of the website. The editing features are more thorough and the system of "authorized editors" for each club creates more complexity while improving the website. Small features like the interest count of a club also provide more complexity to the project.
 
+The single page layout of the website meant that I could not simply have seperate html templates associated with different urls, and so the entire page had to be assembled using JavaScript. This made the website simpler overall for the user but made the complexity of development harder since I could not fully use Django's capabilities with html manipulation.
+
 The largest point of complexity and difficulty for me when creating the project was the images, as the image storage and uploading systems were more complex and in-depth compared to any specifications that were required in previous projects.
 
 Along with the images (which were stored in a Docker volume), the structure of the website during development created more complexity. The website is run on a Docker container using a PostgresSQL database. While these concepts were introduced in the lectures, implementing them onto a robust Django project with features like image upload and storage was a challenge and made the project more complex while making it more scalable, easier to share, and easier to deploy.
@@ -40,13 +42,21 @@ Along with the images (which were stored in a Docker volume), the structure of t
  - models.py: outlines the structure that website data is stored
  - urls.py: defines all the clubs application urls (API routes and account management routes)
  - views.py: defines all API routes and account management routes to store and change the website data using JavaScript fetch calls
+
+## Project Structure
+This website is currently being hosted and managed locally on a Docker container. The base layer of the entire website is the database that stores all information and files relating to the site, which is currently mounted on a Docker volume and managed with PostgresSQL. This database is outlined and manipulated with a Django Python API, where club information is added, modified, and removed using the Django functionalities. The website itself is laid out and organized using html and an html layout, which is rendered using some of the website urls. The page itself is assembled and completed using mostly JavaScript, because of the single page structure. All information is retrieved from fetch calls to the API and displayed, and all interaction is managed through more API calls in JavaScript. This structure is one of many that can create a functional webpage, so there are many improvements that could be made.
+
 ## How to Set Up and Run Website
 ### Requirements:
 ### Process:
 
 ## Citations
 ### Strategies:
-FormData for managing image files:
+Docker and Postgres setup - 
+
+https://learndjango.com/tutorials/django-docker-and-postgresql-tutorial
+
+FormData for managing image files - 
 
 https://developer.mozilla.org/en-US/docs/Web/API/FormData
 
@@ -56,11 +66,7 @@ https://developer.mozilla.org/en-US/docs/Web/API/FormData/Using_FormData_Objects
 
 https://docs.djangoproject.com/en/4.2/ref/request-response/
 
-Docker and Postgres setup:
-
-https://learndjango.com/tutorials/django-docker-and-postgresql-tutorial
-
-Image Storage:
+Image Storage - 
 
 https://docs.djangoproject.com/en/4.2/topics/files/
 
@@ -70,41 +76,49 @@ https://medium.com/@seanoughton/docker-data-volumes-32d83b334d
 
 https://docs.docker.com/storage/volumes/
 
-API info:
+API info - 
 
 https://www.geeksforgeeks.org/difference-between-put-and-patch-request/amp/
 
-Comparisons with .some():
+Comparisons with .some() - 
 
 https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/some
 
-Transform Translate CSS:
+Transform Translate CSS - 
 
 https://developer.mozilla.org/en-US/docs/Web/CSS/transform-function/translate
 
 ### Tools and Style:
-Git:
+Git - 
 
 https://github.com/
 
-Bootstrap:
+Bootstrap - 
 
 https://getbootstrap.com/docs/3.3/getting-started/
 
-Navbar:
+Navbar - 
 
 https://getbootstrap.com/docs/4.0/components/navbar/
 
-Font:
+Font - 
 
 https://fonts.google.com/share?selection.family=Montserrat:wght@500
 
-### Images (Public Domain):
+### Images (Public Domain, used for placeholder example clubs):
+
+Coding Club - 
 
 https://flic.kr/p/2o3eXpC
 
+Debate Club - 
+
 https://flic.kr/p/9xSrLG
 
+Photography Club - 
+
 https://flic.kr/p/7KjuVQ
+
+Bad Club - 
 
 https://flic.kr/p/269qffo
