@@ -628,6 +628,9 @@ function submit_club() { // send request to add club
             // remove error and hide creation page
             document.querySelector('#create-errorMessage').innerHTML = '';
             document.querySelector('#create-container').style.display = 'none';
+            document.querySelector('#create-image-input').value = '';
+            document.querySelector('#create-image-preview').src = '#';
+            document.querySelector('#create-image-remove').style.display = 'none';
             show_approved(); // show approved clubs
         });
     }
