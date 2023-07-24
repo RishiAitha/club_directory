@@ -160,8 +160,7 @@ Bad Club -
 
 https://flic.kr/p/269qffo
 
----
-
-#### Contact:
+## Contact
 **Project Made by Rishi Aitha**
+
 Email: rishi.aitha@gmail.com
