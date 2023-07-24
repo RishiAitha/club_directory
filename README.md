@@ -142,24 +142,6 @@ Font -
 
 https://fonts.google.com/share?selection.family=Montserrat:wght@500
 
-### Images (Public Domain, used for placeholder example clubs):
-
-Coding Club - 
-
-https://flic.kr/p/2o3eXpC
-
-Debate Club - 
-
-https://flic.kr/p/9xSrLG
-
-Photography Club - 
-
-https://flic.kr/p/7KjuVQ
-
-Bad Club - 
-
-https://flic.kr/p/269qffo
-
 ## Contact
 **Project Made by Rishi Aitha**
 
