@@ -1,0 +1,107 @@
+{% extends "clubs/layout.html" %}
+{% load static %}
+
+{% block body %}
+    <div id="clubs-container"></div>
+
+    <div id="single-container"></div>
+
+    <div id="create-container">
+        <h2>Add New Club</h2>
+        <h4>A request for the club page will be submitted and approved by a site administrator.</h4>
+        <p id="create-errorMessage"></p>
+        <form onsubmit="submit_club();return false" id="create-form">
+            <div class="form-group">
+                <input id="create-title" class="form-control" placeholder="Club Title" />
+            </div>
+            <div class="form-group">
+                <textarea id="create-description" class="form-control" placeholder="Club Description"></textarea>
+            </div>
+            <div class="form-group">
+                <textarea id="create-announcement" class="form-control" placeholder="Club Announcement(s)"></textarea>
+            </div>
+            <div id="create-image-container" class="form-group">
+                <h4 id="create-image-info">Upload Image for Club Page:</h4>
+                <div id="create-image-inputContainer">
+                    <input type="file" id="create-image-input" accept="image/*" />
+                </div>
+                <button type="button" id="create-image-remove" class="btn btn-primary" style="display: none;">Remove Image</button>
+                <img id="create-image-preview" src="#" alt="" />
+            </div>
+            <input type="submit" class="btn btn-primary" value="Submit Club Request" />
+        </form>
+    </div>
+
+    <div id="edit-container">
+        <h2>Edit Club Page Content</h2>
+        <p id="edit-errorMessage"></p>
+        <form onsubmit="edit_club();return false" id="edit-form">
+            <div class="form-group">
+                <input disabled id="edit-title" class="form-control" placeholder="Club Title" />
+            </div>
+            <div class="form-group">
+                <textarea id="edit-description" class="form-control" placeholder="Club Description"></textarea>
+            </div>
+            <div class="form-group">
+                <textarea id="edit-announcement" class="form-control" placeholder="Club Announcement(s)"></textarea>
+            </div>
+            <div id="edit-image-container" class="form-group">
+                <h4 id="edit-image-info">Upload New Image:</h4>
+                <div id="edit-image-inputContainer">
+                    <input type="file" id="edit-image-input" accept="image/*" />
+                </div>
+                <button type="button" id="edit-image-remove" class="btn btn-primary btn-lg" style="display: none;">Cancel Uploaded Image</button>
+                <img id="edit-image-preview" src="#" alt="" />
+                <hr>
+                <label id="edit-image-label">
+                    <input type="checkbox" id="edit-image-none" />  Select this to have no image on the club page (overrides uploaded image).
+                </label>
+            </div>
+            <input type="submit" class="btn btn-primary btn-lg" value="Submit Club Edit" />
+        </form>
+    </div>
+
+    <div id="editors-container">
+        <h2 id="editors-display">Change Authorized Club Editors</h2>
+        <hr>
+        <p id="editors-errorMessage"></p>
+        <h3>Add Editor: </h3>
+        <form onsubmit="add_editor();return false" id="editors-add-form">
+            <div class="form-group">
+                <input id="editors-add-input" class="form-control" placeholder="Editor Email" />
+            </div>
+            <input type="submit" class="btn btn-primary btn-lg" value="Confirm Adding Editor" />
+        </form>
+        <hr>
+        <h3>Remove Editor: </h3>
+        <form onsubmit="remove_editor();return false" id="editors-remove-form">
+            <div class="form-group">
+                <select id="editors-remove-input" class="form-control"></select>
+            </div>
+            <input type="submit" class="btn btn-primary btn-lg" value="Confirm Removing Editor" />
+        </form>
+    </div>
+
+    <div id="form-container" style="display: none;">
+        <div id="post-container" style="display: none;">
+            <h3 id="post-title">New Message</h3>
+            <p id="post-errorMessage"></p>
+            <form id="post-form">
+                <textarea class="form-control" id="post-content" placeholder="Message Content"></textarea>
+                <input type="submit" class="btn btn-primary btn-lg" id="post-submit" value="Post Message" />
+            </form>
+        </div>
+        <div id="postReply-container" style="display: none;">
+            <h3 id="postReply-title">New Reply</h3>
+            <p id="postReply-errorMessage"></p>
+            <form id="postReply-form">
+                <textarea class="form-control" id="postReply-content" placeholder="Reply Content"></textarea>
+                <input type="submit" class="btn btn-primary btn-lg" id="postReply-submit" value="Post Reply" />
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'clubs/index.js' %}"></script>
+{% endblock %}
