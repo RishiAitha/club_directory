@@ -57,17 +57,18 @@ The requirements.txt file is used by the Docker container to easily set up the w
  - The website is not in a deployment phase as of submission, so make sure to keep DEBUG=True and other settings in settings.py untouched.
 
 **How to Set Up:**
- - Install and set up Docker Desktop on your computer to run the web server. Ensure that the Docker Engine software is running while doing the rest of the process.
+ - Install and set up Docker Desktop on your computer to run the web server, using this link: https://docs.docker.com/get-docker/. Ensure that the Docker Engine software is running while doing the rest of the process.
  - Download and extract all the files from the GitHub repository into a desired directory, if you haven't already.
  - Open a new terminal in Command Prompt (or equivalent in another OS). Open the directory containing the downloaded files in the terminal.
  - Run the command ```docker compose up -d --build``` to build the container and keep the terminal open to execute further commands. On Docker Desktop, you should see a container with two images running.
  - Run the migrations for the website with ```docker compose exec web python manage.py migrate```.
  - Unfortunately, due to the data in the database being stored on a volume, data in a build of the website is exclusive to that host. Other computers and even other directories cannot access the same volume data, so the PostgreSQL database will be empty when the server runs.
+ - When you are done testing, you can stop running the website with the command ```docker compose down```.
 
 **Database Setup:**
  - Note: You can completely refresh the web page with ctrl+shift+r if things don't update right away.
  - Create a super user account using the command ```docker compose exec web python manage.py createsuperuser``` and choose your username, email, and password. (THIS IS IMPORTANT FOR ACCESSING ADMIN FEATURES)
- - Log into the admin page at the url "localhost:8000/admin/".
+ - Log into the admin page at the url localhost:8000/admin/.
  - On the admin page, you can add and change data as you please, but you can also change info on the normal user page if your account is an admin, which can be toggled in the actual admin page.
  - Open the users section, go to your superuser account, toggle the isAdmin checkbox to true, and save the changes.
  - Now, when you open the website and log in with your superuser details, all the features will be accessible.
