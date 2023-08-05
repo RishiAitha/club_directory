@@ -132,3 +132,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / "mediafiles"
+
+CSRF_TRUSTED_ORIGINS = ["http://localhost:1337"]
