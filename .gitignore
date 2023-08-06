@@ -3,3 +3,5 @@
 .env.dev
 .env.staging
 .env.staging.db
+.env.staging.proxy-companion
+.env.prod.proxy-companion
