@@ -245,7 +245,7 @@ function show_previews(clubs) { // show a preview of a club
             // display extra admin info
             const timestamp = document.createElement('p');
             timestamp.classList.add('preview-timestamp');
-            timestamp.innerHTML = 'Added ' + club.timestamp;
+            timestamp.innerHTML = 'Added ' + club.timestamp + ' UTC';
             previewContainer.append(timestamp);
 
             const creator = document.createElement('p');
@@ -418,7 +418,7 @@ function show_messages(clubID, postReplyContainer) { // show the messages for a 
 
                 const timestamp = document.createElement('div'); // show when message was posted
                 timestamp.classList.add('message-timestamp');
-                timestamp.innerHTML = message.timestamp;
+                timestamp.innerHTML = message.timestamp + ' UTC';
                 messageInfo.append(timestamp);
 
                 messageInfo.append(document.createElement('br'));
@@ -507,7 +507,7 @@ function show_replies(clubID, message, singleMessage, postReplyContainer) { // s
 
         const timestamp = document.createElement('div'); // show when reply was posted
         timestamp.classList.add('reply-timestamp');
-        timestamp.innerHTML = reply.timestamp;
+        timestamp.innerHTML = reply.timestamp + ' UTC';
         singleReply.append(timestamp);
 
         const content = document.createElement('p'); // show reply content
