@@ -29,6 +29,7 @@ class Club(models.Model):
     messages = models.ManyToManyField("Message", related_name="clubs", blank=True)
     isApproved = models.BooleanField(default=False)
     timestamp = models.DateTimeField(auto_now_add=True)
+    formLink = models.URLField(max_length=256, blank=True)
 
     def __str__(self):
         return f"CLUB{self.id} - {self.title}"
@@ -45,7 +46,8 @@ class Club(models.Model):
             "creator": self.creator.serialize(),
             "messages": [message.serialize() for message in self.messages.all()], # order by is not needed because of pagination API route
             "timestamp": self.timestamp.strftime("%b %d %Y, %I: %M %p"),
-            "isApproved": self.isApproved
+            "isApproved": self.isApproved,
+            "formLink": self.formLink
         }
 
         data['image'] = self.image.url if self.image else None

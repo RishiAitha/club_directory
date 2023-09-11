@@ -111,11 +111,12 @@ def create_club(request): # creates new club request that is still pending based
         title = request.POST.get("title", "")
         description = request.POST.get("description", "")
         announcement = request.POST.get("announcement", "")
+        formLink = request.POST.get("formLink", "")
         creator = request.user
 
         imageFile = request.FILES.get("image")
         
-        club = Club(title=title, description=description, announcement=announcement, creator=creator)
+        club = Club(title=title, description=description, announcement=announcement, formLink=formLink, creator=creator)
         club.save()
         club.editors.add(creator)
         club.save()
@@ -139,6 +140,7 @@ def edit_content(request): # edit description, announcement, and image of a club
         clubID = request.POST.get("clubID", "")
         description = request.POST.get("description", "")
         announcement = request.POST.get("announcement", "")
+        formLink = request.POST.get("formLink", "")
         noImage = request.POST.get("noImage", "").lower()
         
         imageFile = request.FILES.get("image")
@@ -152,6 +154,7 @@ def edit_content(request): # edit description, announcement, and image of a club
         if club.editors.contains(request.user) or request.user.isAdmin: # checks if user is an editor or admin
             club.description = description
             club.announcement = announcement
+            club.formLink = formLink
             club.save()
 
             if noImage == "true":

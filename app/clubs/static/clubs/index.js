@@ -33,6 +33,7 @@ document.addEventListener('DOMContentLoaded', function() { // on start
             document.querySelector('#create-title').value = '';
             document.querySelector('#create-description').value = '';
             document.querySelector('#create-announcement').value = '';
+            document.querySelector('#create-formLink').value = '';
             document.querySelector('#create-errorMessage').innerHTML = '';
             document.querySelector('#create-image-input').value = '';
 
@@ -329,6 +330,17 @@ function show_club(id) { // show a page for a club
             announcement.innerHTML = club.announcement;
             announcementContainer.append(announcement);
         }
+
+        if (club.formLink != '') {
+            const formContainer = document.createElement('div');
+            formContainer.id = 'single-formContainer';
+            document.querySelector('#single-container').append(formContainer);
+
+            const formLink = document.createElement('h3');
+            formLink.id = 'single-formLink';
+            formLink.innerHTML = club.formLink;
+            formContainer.append(formLink);
+        }
         
         // if clubs being displayed are not pending clubs, allow general interaction
         // otherwise general interaction should not be possible since the club is not in the main page yet
@@ -617,6 +629,7 @@ function submit_club() { // send request to add club
         formData.append('title', document.querySelector('#create-title').value);
         formData.append('description', document.querySelector('#create-description').value);
         formData.append('announcement', document.querySelector('#create-announcement').value);
+        formData.append('formLink', document.querySelector('#create-formLink').value);
         formData.append('image', file);
 
         fetch('/create', { // send club info to server
@@ -695,6 +708,7 @@ function edit_club() { // send request to edit club content
         formData.append('clubID', parseInt(sessionStorage.getItem('editing')));
         formData.append('description', document.querySelector('#edit-description').value);
         formData.append('announcement', document.querySelector('#edit-announcement').value);
+        formData.append('formLink', document.querySelector('#edit-formLink').value);
         formData.append('noImage', document.querySelector('#edit-image-none').checked);
         formData.append('image', file);
 
