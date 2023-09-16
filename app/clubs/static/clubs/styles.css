@@ -234,7 +234,7 @@ p {
     margin-bottom: 30px;
 }
 
-#single-descriptionLabel, #single-announcementLabel, #single-interestContainer {
+#single-descriptionLabel, #single-announcementLabel, #single-interestContainer, #single-formContainer {
     text-align: center;
 }
 
@@ -286,6 +286,21 @@ p {
         border-left: dashed;
         border-left-width: 1px;
         flex-grow: 1;
+    }
+}
+
+#single-formEmbed {
+    width: 640px;
+    height: 1158px;
+}
+
+#single-formLink {
+    font-size: 1.4rem;
+}
+
+@media screen and (max-width:450px) {
+    #single-formLink {
+        font-size: 1rem;
     }
 }
 

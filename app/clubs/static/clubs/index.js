@@ -330,17 +330,6 @@ function show_club(id) { // show a page for a club
             announcement.innerHTML = club.announcement;
             announcementContainer.append(announcement);
         }
-
-        if (club.formLink != '') {
-            const formContainer = document.createElement('div');
-            formContainer.id = 'single-formContainer';
-            document.querySelector('#single-container').append(formContainer);
-
-            const formLink = document.createElement('h3');
-            formLink.id = 'single-formLink';
-            formLink.innerHTML = club.formLink;
-            formContainer.append(formLink);
-        }
         
         // if clubs being displayed are not pending clubs, allow general interaction
         // otherwise general interaction should not be possible since the club is not in the main page yet
@@ -360,8 +349,13 @@ function show_club(id) { // show a page for a club
             if (sessionStorage.getItem('loggedIn') === 'true') {
                 const interestButtonInfo = document.createElement('p'); // indicate how interest button works
                 interestButtonInfo.id = 'single-interestButtonInfo';
-                interestButtonInfo.innerHTML = 'Are you interested in joining the club?';
+                interestButtonInfo.innerHTML = 'Are you interested in joining the club? (This just shows the officers general interest in the club, and does not count as registration.)';
                 interestContainer.append(interestButtonInfo);
+
+                const interestButtonNote = document.createElement('p'); // extra info for the interest button
+                interestButtonNote.id = 'single-interestButtonNote';
+                interestButtonNote.innerHTML = '**If you are now a club member, or are no longer interested, please remove interest for a more accurate measure!';
+                interestContainer.append(interestButtonNote);
 
                 const interestButton = document.createElement('button');
                 interestButton.id = 'single-interestButton';
@@ -380,6 +374,46 @@ function show_club(id) { // show a page for a club
                     }
                 }
                 interestContainer.append(interestButton);
+            }
+
+            document.querySelector('#single-container').append(document.createElement('hr'));
+
+            if (club.formLink != '') {
+                const formContainer = document.createElement('div');
+                formContainer.id = 'single-formContainer';
+                document.querySelector('#single-container').append(formContainer);
+
+                const formLabel = document.createElement('h3');
+                formLabel.id = 'single-formLabel';
+                formLabel.innerHTML = 'Google Form:'
+                formContainer.append(formLabel);
+
+                const formInfo = document.createElement('p');
+                formInfo.id = 'single-formInfo';
+                formInfo.innerHTML = 'If you are interested, please fill the form below!';
+                formContainer.append(formInfo);
+
+                const formNote = document.createElement('p');
+                formNote.id = 'single-formNote';
+                formNote.innerHTML = 'You may be prompted to sign in and be taken to the form on another tab. Then, the form will be greyed out here but you can access it again when you refresh this page and also in the tab it opens in. Here is the direct form link:';
+                formContainer.append(formNote);
+
+                const formLink = document.createElement('a');
+                formLink.id = 'single-formLink';
+                formLink.href = club.formLink;
+                formLink.innerHTML = club.formLink;
+                formContainer.append(formLink);
+
+                formContainer.append(document.createElement('p'));
+                
+                const formEmbed = document.createElement('iframe');
+                formEmbed.id = 'single-formEmbed';
+                formEmbed.innerHTML = 'Loading...';
+                formEmbed.setAttribute('src', club.formLink + '&embedded=true');
+                formEmbed.setAttribute('frameborder', 0);
+                formEmbed.setAttribute('marginheight', 0);
+                formEmbed.setAttribute('marginwidth', 0);
+                formContainer.append(formEmbed);
             }
 
             document.querySelector('#single-container').append(document.createElement('hr'));
