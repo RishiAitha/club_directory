@@ -172,6 +172,7 @@ function show_previews(clubs) { // show a preview of a club
                 document.querySelector('#edit-title').value = club.title;
                 document.querySelector('#edit-description').value = club.description;
                 document.querySelector('#edit-announcement').value = club.announcement;
+                document.querySelector('#edit-formLink').value = club.formLink;
                 document.querySelector('#edit-image-input').value = '';
                 document.querySelector('#edit-image-preview').src = '#';
                 document.querySelector('#edit-image-remove').style.display = 'none';
@@ -655,6 +656,8 @@ function submit_club() { // send request to add club
         document.querySelector('#create-errorMessage').innerHTML = 'Club must have title.';
     } else if (document.querySelector('#create-description').value === '') { // if no description is provided, show error
         document.querySelector('#create-errorMessage').innerHTML = 'Club must have description.';
+    } else if (!document.querySelector('#create-formLink').value.includes('docs.google.com/forms/') || document.querySelector('#create-formLink').value.includes('</iframe>')) {
+        document.querySelector('#create-errorMessage').innerHTML = 'Google Form link must be a non-shortened link copied from the Google Forms editor share/send page.';
     } else {
         // store club information to be sent
         const formData = new FormData(document.querySelector('#create-form')); // create FormData object to hold info
@@ -734,6 +737,8 @@ function post_reply(clubID, messageID) { // send request to post reply
 function edit_club() { // send request to edit club content
     if (document.querySelector('#edit-description').value === '') { // if no description is provided, show error
         document.querySelector('#edit-errorMessage').innerHTML = 'Club must have description.';
+    } else if (!document.querySelector('#edit-formLink').value.includes('docs.google.com/forms/') || document.querySelector('#edit-formLink').value.includes('</iframe>')) {
+        document.querySelector('#edit-errorMessage').innerHTML = 'Google Form link must be a non-shortened link copied from the Google Forms editor share/send page.';
     } else {
         // store edited club information
         const formData = new FormData(document.querySelector('#edit-form')); // create FormData object to hold info
