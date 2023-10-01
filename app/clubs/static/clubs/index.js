@@ -375,52 +375,71 @@ function show_club(id) { // show a page for a club
                     }
                 }
                 interestContainer.append(interestButton);
-            }
 
-            document.querySelector('#single-container').append(document.createElement('hr'));
+                document.querySelector('#single-container').append(document.createElement('hr'));
 
-            if (club.formLink != '') {
-                const formContainer = document.createElement('div');
-                formContainer.id = 'single-formContainer';
-                document.querySelector('#single-container').append(formContainer);
-
-                const formLabel = document.createElement('h3');
-                formLabel.id = 'single-formLabel';
-                formLabel.innerHTML = 'Google Form:'
-                formContainer.append(formLabel);
-
-                const formInfo = document.createElement('p');
-                formInfo.id = 'single-formInfo';
-                formInfo.innerHTML = 'If you are interested, please fill the form below!';
-                formContainer.append(formInfo);
-
-                const formNote = document.createElement('p');
-                formNote.id = 'single-formNote';
-                formNote.innerHTML = 'You may be prompted to sign in and be taken to the form on another tab. Then, the form will be greyed out here but you can access it again when you refresh this page and also in the tab it opens in. Here is the direct form link:';
-                formContainer.append(formNote);
-
-                const formLink = document.createElement('a');
-                formLink.id = 'single-formLink';
-                formLink.href = club.formLink;
-                formLink.innerHTML = club.formLink;
-                formContainer.append(formLink);
-
-                formContainer.append(document.createElement('p'));
-                
-                const formEmbed = document.createElement('iframe');
-                formEmbed.id = 'single-formEmbed';
-                formEmbed.innerHTML = 'Loading...';
-                formEmbed.setAttribute('src', club.formLink + '&embedded=true');
-                formEmbed.setAttribute('frameborder', 0);
-                formEmbed.setAttribute('marginheight', 0);
-                formEmbed.setAttribute('marginwidth', 0);
-                formContainer.append(formEmbed);
+                if (club.formLink != '') {
+                    const formContainer = document.createElement('div');
+                    formContainer.id = 'single-formContainer';
+                    document.querySelector('#single-container').append(formContainer);
+    
+                    const formLabel = document.createElement('h3');
+                    formLabel.id = 'single-formLabel';
+                    formLabel.innerHTML = 'Google Form:'
+                    formContainer.append(formLabel);
+    
+                    const formInfo = document.createElement('p');
+                    formInfo.id = 'single-formInfo';
+                    formInfo.innerHTML = 'If you are interested, please fill the form below!';
+                    formContainer.append(formInfo);
+    
+                    const formNote = document.createElement('p');
+                    formNote.id = 'single-formNote';
+                    formNote.innerHTML = 'You may be prompted to sign in and be taken to the form on another tab. Then, the form will be greyed out here but you can access it again when you refresh this page and also in the tab it opens in. Here is the direct form link:';
+                    formContainer.append(formNote);
+    
+                    const formLink = document.createElement('a');
+                    formLink.id = 'single-formLink';
+                    formLink.href = club.formLink;
+                    formLink.innerHTML = club.formLink;
+                    formContainer.append(formLink);
+    
+                    formContainer.append(document.createElement('p'));
+                    
+                    const formEmbed = document.createElement('iframe');
+                    formEmbed.id = 'single-formEmbed';
+                    formEmbed.innerHTML = 'Loading...';
+                    formEmbed.setAttribute('src', club.formLink + '&embedded=true');
+                    formEmbed.setAttribute('frameborder', 0);
+                    formEmbed.setAttribute('marginheight', 0);
+                    formEmbed.setAttribute('marginwidth', 0);
+                    formContainer.append(formEmbed);
+                }
             }
 
             document.querySelector('#single-container').append(document.createElement('hr'));
             
             const postReplyContainer = document.querySelector('#postReply-container').cloneNode(true); // create reply option that switches between messages
             show_messages(club.id, postReplyContainer); // show club messages
+        } else { // club is pending
+            document.querySelector('#single-container').append(document.createElement('hr'));
+
+            const pendingLabelContainer = document.createElement('div');
+            pendingLabelContainer.id = 'single-pendingLabelContainer';
+            document.querySelector('#single-container').append(pendingLabelContainer);
+
+            const pendingLabel = document.createElement('h3');
+            pendingLabel.id = 'single-pendingLabel';
+            pendingLabel.innerHTML = 'Approve the club to see the interest count and message board!';
+            pendingLabelContainer.append(pendingLabel);
+
+            if (club.formLink != '') {
+                const formLinkLabel = document.createElement('a');
+                formLinkLabel.id = 'single-formLinkLabel';
+                formLinkLabel.href = club.formLink;
+                formLinkLabel.innerHTML = 'Here is the Google Form link provided (respond only when needed): ' + club.formLink;
+                pendingLabelContainer.append(formLinkLabel);
+            }
         }
     });
 }
@@ -429,7 +448,7 @@ function show_messages(clubID, postReplyContainer) { // show the messages for a 
     fetch(`/messages/${clubID}/${sessionStorage.getItem('messagePage')}`) // get messages based on club and page
     .then(response => response.json())
     .then(messages => {
-        if (messages.length > 0 || sessionStorage.getItem('loggedIn') == 'true') {
+        if (messages.length > 0 || sessionStorage.getItem('loggedIn') === 'true') {
             const messageLabel = document.createElement('h2'); // indicate message board
             messageLabel.id = 'single-messageLabel';
             messageLabel.innerHTML = 'Message Board:';
@@ -482,14 +501,16 @@ function show_messages(clubID, postReplyContainer) { // show the messages for a 
                 document.querySelector('#single-container').append(messageContainer);
             });
             show_pagenav(clubID); // after all the messages, show navigation to switch around the messages
-        } else {
+        }
+
+        if (sessionStorage.getItem('loggedIn') !== 'true') {
             const loginLabelContainer = document.createElement('div');
             loginLabelContainer.id = 'single-loginLabelContainer';
             document.querySelector('#single-container').append(loginLabelContainer);
 
             const loginLabel = document.createElement('a'); // indicate message board
             loginLabel.id = 'single-loginLabel';
-            loginLabel.innerHTML = 'Log in to post messages below!';
+            loginLabel.innerHTML = 'Log in to post messages and provide input!';
             loginLabel.href = 'login';
             loginLabelContainer.append(loginLabel);
         }

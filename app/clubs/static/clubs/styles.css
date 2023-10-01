@@ -304,19 +304,27 @@ p {
     }
 }
 
-#single-loginLabelContainer {
+#single-loginLabelContainer, #single-pendingLabelContainer {
     margin: auto;
     text-align: center;
 }
 
-#single-loginLabel {
+#single-loginLabel, #single-pendingLabel {
     font-size: 2.2rem;
     cursor: pointer;
 }
 
+#single-formLinkLabel {
+    font-size: 1.4rem;
+}
+
 @media screen and (max-width:450px) {
-    #single-loginLabel {
+    #single-loginLabel, #single-pendingLabel {
         font-size: 1.2rem !important;
+    }
+    
+    #single-formLinkLabel {
+        font-size: 1rem !important;
     }
 }
 
