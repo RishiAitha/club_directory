@@ -589,8 +589,6 @@ function show_replies(clubID, message, singleMessage, postReplyContainer) { // s
 
 function convert_timestamp(timestamp) {
     const utcDate = new Date(timestamp);
-    const timezoneOffset = utcDate.getTimezoneOffset();
-    const easternDate = new Date(utcDate.getTime() - timezoneOffset);
     const options = {
         year: "numeric",
         month: "short",
@@ -600,7 +598,7 @@ function convert_timestamp(timestamp) {
         hour12: true,
         timeZoneName: "short"
     };
-    const localTime = easternDate.toLocaleString("en-US", options);
+    const localTime = utcDate.toLocaleString("en-US", options);
     return localTime;
 }
 
