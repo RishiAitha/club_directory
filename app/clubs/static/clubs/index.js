@@ -247,7 +247,7 @@ function show_previews(clubs) { // show a preview of a club
             // display extra admin info
             const timestamp = document.createElement('p');
             timestamp.classList.add('preview-timestamp');
-            timestamp.innerHTML = 'Added ' + club.timestamp + ' UTC';
+            timestamp.innerHTML = 'Added ' + convert_timestamp(club.timestamp + ' UTC');
             previewContainer.append(timestamp);
 
             const creator = document.createElement('p');
@@ -484,7 +484,7 @@ function show_messages(clubID, postReplyContainer) { // show the messages for a 
 
                 const timestamp = document.createElement('div'); // show when message was posted
                 timestamp.classList.add('message-timestamp');
-                timestamp.innerHTML = message.timestamp + ' UTC';
+                timestamp.innerHTML = convert_timestamp(message.timestamp + ' UTC');
                 messageInfo.append(timestamp);
 
                 messageInfo.append(document.createElement('br'));
@@ -575,7 +575,7 @@ function show_replies(clubID, message, singleMessage, postReplyContainer) { // s
 
         const timestamp = document.createElement('div'); // show when reply was posted
         timestamp.classList.add('reply-timestamp');
-        timestamp.innerHTML = reply.timestamp + ' UTC';
+        timestamp.innerHTML = convert_timestamp(reply.timestamp + ' UTC');
         singleReply.append(timestamp);
 
         const content = document.createElement('p'); // show reply content
@@ -585,6 +585,23 @@ function show_replies(clubID, message, singleMessage, postReplyContainer) { // s
     });
 
     singleMessage.append(replyContainer);
+}
+
+function convert_timestamp(timestamp) {
+    const utcDate = new Date(timestamp);
+    const timezoneOffset = utcDate.getTimezoneOffset();
+    const easternDate = new Date(utcDate.getTime() - timezoneOffset);
+    const options = {
+        year: "numeric",
+        month: "short",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+        timeZoneName: "short"
+    };
+    const localTime = easternDate.toLocaleString("en-US", options);
+    return localTime;
 }
 
 function show_pagenav(clubID) { // show page navigation for message board
@@ -677,7 +694,7 @@ function submit_club() { // send request to add club
         document.querySelector('#create-errorMessage').innerHTML = 'Club must have title.';
     } else if (document.querySelector('#create-description').value === '') { // if no description is provided, show error
         document.querySelector('#create-errorMessage').innerHTML = 'Club must have description.';
-    } else if (!document.querySelector('#create-formLink').value.includes('docs.google.com/forms/') || document.querySelector('#create-formLink').value.includes('</iframe>')) {
+    } else if (document.querySelector('#create-formLink').value !== '' && (!document.querySelector('#create-formLink').value.includes('docs.google.com/forms/') || document.querySelector('#create-formLink').value.includes('</iframe>'))) {
         document.querySelector('#create-errorMessage').innerHTML = 'Google Form link must be a non-shortened link copied from the Google Forms editor share/send page.';
     } else {
         // store club information to be sent
@@ -758,7 +775,7 @@ function post_reply(clubID, messageID) { // send request to post reply
 function edit_club() { // send request to edit club content
     if (document.querySelector('#edit-description').value === '') { // if no description is provided, show error
         document.querySelector('#edit-errorMessage').innerHTML = 'Club must have description.';
-    } else if (!document.querySelector('#edit-formLink').value.includes('docs.google.com/forms/') || document.querySelector('#edit-formLink').value.includes('</iframe>')) {
+    } else if (document.querySelector('#edit-formLink').value !== '' && (!document.querySelector('#edit-formLink').value.includes('docs.google.com/forms/') || document.querySelector('#edit-formLink').value.includes('</iframe>'))) {
         document.querySelector('#edit-errorMessage').innerHTML = 'Google Form link must be a non-shortened link copied from the Google Forms editor share/send page.';
     } else {
         // store edited club information

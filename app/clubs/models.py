@@ -69,7 +69,7 @@ class Message(models.Model):
             "content": self.content,
             "timestamp": self.timestamp.strftime("%b %d %Y, %I: %M %p"),
             "poster": self.poster.serialize(),
-            "replies": [reply.serialize() for reply in self.replies.order_by("-timestamp").all()] # order by is needed to avoid extra API route
+            "replies": [reply.serialize() for reply in self.replies.order_by("timestamp").all()] # order by is needed to avoid extra API route
         }
     
 class Reply(models.Model):
