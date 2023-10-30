@@ -448,24 +448,21 @@ function show_messages(clubID, postReplyContainer) { // show the messages for a 
     fetch(`/messages/${clubID}/${sessionStorage.getItem('messagePage')}`) // get messages based on club and page
     .then(response => response.json())
     .then(messages => {
-        if (messages.length > 0 || sessionStorage.getItem('loggedIn') === 'true') {
+        if (messages.length > 0 && sessionStorage.getItem('loggedIn') === 'true') { // if there are messages and user is logged in
             const messageLabel = document.createElement('h2'); // indicate message board
             messageLabel.id = 'single-messageLabel';
             messageLabel.innerHTML = 'Message Board:';
             document.querySelector('#single-container').append(messageLabel);
 
-            if (sessionStorage.getItem('loggedIn') == 'true') { // if user is logged in
-                const postContainer = document.querySelector('#post-container').cloneNode(true); // get post option to add to page
-                postContainer.style.display = 'block';
-                document.querySelector('#single-container').appendChild(postContainer);
-                document.querySelector('#post-form').onsubmit = () => { // post message if post form is submitted
-                    post_message(clubID);
-                    return false;
-                }
-                
-                document.querySelector('#single-container').append(document.createElement('hr'));
+            const postContainer = document.querySelector('#post-container').cloneNode(true); // get post option to add to page
+            postContainer.style.display = 'block';
+            document.querySelector('#single-container').appendChild(postContainer);
+            document.querySelector('#post-form').onsubmit = () => { // post message if post form is submitted
+                post_message(clubID);
+                return false;
             }
-
+            
+            document.querySelector('#single-container').append(document.createElement('hr'));
             const messageContainer = document.createElement('div');
             messageContainer.id = 'message-container';
             messages.forEach(message => { // iterate through messages (maximum of 10)
