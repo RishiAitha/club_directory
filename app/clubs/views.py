@@ -1,4 +1,5 @@
 import json
+import re
 from django.shortcuts import render
 from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
@@ -8,6 +9,8 @@ from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
+from django.core.validators import EmailValidator
+from django.core.exceptions import ValidationError
 
 from .models import User, Club, Message, Reply
 
@@ -46,6 +49,20 @@ def register(request): # registers new account based on given info
         if password != confirmation:
             return render(request, "clubs/register.html", {
                 "message": "The password and confirmation must match."
+            })
+        
+        email_validator = EmailValidator(message="Enter a valid email address.")
+        try:
+            email_validator(email)
+        except ValidationError as validationError:
+            return render(request, "clubs/register.html", {
+                "message": validationError.message
+            })
+
+        validEmail = r'^[a-zA-Z0-9._%+-]+@(dasd\.org|student\.dasd\.org)$'
+        if not re.match(validEmail, email):
+            return render(request, "clubs/register.html", {
+                "message": "You must use a valid DASD email address."
             })
         
         try:
