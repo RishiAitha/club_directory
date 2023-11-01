@@ -448,7 +448,7 @@ function show_messages(clubID, postReplyContainer) { // show the messages for a 
     fetch(`/messages/${clubID}/${sessionStorage.getItem('messagePage')}`) // get messages based on club and page
     .then(response => response.json())
     .then(messages => {
-        if (messages.length > 0 && sessionStorage.getItem('loggedIn') === 'true') { // if there are messages and user is logged in
+        if (sessionStorage.getItem('loggedIn') === 'true') { // if there are messages and user is logged in
             const messageLabel = document.createElement('h2'); // indicate message board
             messageLabel.id = 'single-messageLabel';
             messageLabel.innerHTML = 'Message Board:';
@@ -498,9 +498,7 @@ function show_messages(clubID, postReplyContainer) { // show the messages for a 
                 document.querySelector('#single-container').append(messageContainer);
             });
             show_pagenav(clubID); // after all the messages, show navigation to switch around the messages
-        }
-
-        if (sessionStorage.getItem('loggedIn') !== 'true') {
+        } else {
             const loginLabelContainer = document.createElement('div');
             loginLabelContainer.id = 'single-loginLabelContainer';
             document.querySelector('#single-container').append(loginLabelContainer);
