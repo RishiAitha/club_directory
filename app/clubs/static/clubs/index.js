@@ -448,7 +448,7 @@ function show_messages(clubID, postReplyContainer) { // show the messages for a 
     fetch(`/messages/${clubID}/${sessionStorage.getItem('messagePage')}`) // get messages based on club and page
     .then(response => response.json())
     .then(messages => {
-        if (sessionStorage.getItem('loggedIn') === 'true') { // if there are messages and user is logged in
+        if (sessionStorage.getItem('loggedIn') === 'true') { // if user is logged in
             const messageLabel = document.createElement('h2'); // indicate message board
             messageLabel.id = 'single-messageLabel';
             messageLabel.innerHTML = 'Message Board:';
