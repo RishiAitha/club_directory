@@ -59,7 +59,7 @@ def register(request): # registers new account based on given info
                 "message": validationError.message
             })
 
-        validDomain = r'(dasd\.org|student\.dasd\.org)$'
+        validDomain = r'@(dasd\.org|student\.dasd\.org)$'
         if not re.search(validDomain, email):
             return render(request, "clubs/register.html", {
                 "message": "You must use a valid DASD email address."
