@@ -1,7 +1,7 @@
 # Club Directory - CS50W Capstone
 
 ## Project Overview
-This website is a submission for the CS50W Capstone Project and is made by Rishi Aitha. The purpose of the site is to provide easy organization and access for information on clubs and activities at a school. I plan on deploying the site and offering it to my school to use for the students.
+This website is a submission for the CS50W Capstone Project and is made by Rishi Aitha. The purpose of the site is to provide easy organization and access for information on clubs and activities at a school. The project is deployed with Docker/AWS and a functional demo with little testing data is available at https://clubdirectory.net.
 
 The idea arose because of the confusion that I and many other students faced when deciding what kinds of opportunities and activities we wanted to pursue at the beginning of high school. This website could be a great source of information and discussion to help students find clubs that they can be passionate about.
 
