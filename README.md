@@ -1,4 +1,4 @@
-# Club Directory - CS50W Capstone
+# Club Directory - CS50W Capstone (and personal project)
 
 ## Project Overview
 This website is a submission for the CS50W Capstone Project and is made by Rishi Aitha. The purpose of the site is to provide easy organization and access for information on clubs and activities at a school. It has been created with the Django framework, with the majority of work done on the backend with Python and basic frontend with HTML/CSS/JavaScript. The project is deployed with Docker/AWS and a functional demo with little testing data is available at https://clubdirectory.net.
